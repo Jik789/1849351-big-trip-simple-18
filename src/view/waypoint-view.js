@@ -7,7 +7,6 @@ const createWaypointTemplate = (waypoint) => {
   const dateFromReadble = humanizeDate(dateFrom);
   const dateToReadble = humanizeDate(dateTo);
 
-  console.log(waypoint.destination.id)
   return (`
 <li class="trip-events__item">
   <div class="event">
