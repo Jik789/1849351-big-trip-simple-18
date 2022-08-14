@@ -8,13 +8,14 @@ export default class EventListPresenter {
   EventListComponent = new EventListView();
 
   init = (parentContainer) => {
+    const WaypointCount = 3;
     this.parentContainer = parentContainer;
 
     render(this.EventListComponent, this.parentContainer);
     render(new FormEditView(), this.EventListComponent.getElement());
     render(new FormAddView(), this.EventListComponent.getElement());
 
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i < WaypointCount; i++) {
       render(new WaypointView(), this.EventListComponent.getElement());
     }
   };
