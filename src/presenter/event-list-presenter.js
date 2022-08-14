@@ -7,16 +7,18 @@ import { render } from '../render.js';
 export default class EventListPresenter {
   EventListComponent = new EventListView();
 
-  init = (parentContainer) => {
-    const WaypointCount = 3;
+  init = (parentContainer, waypointModel) => {
     this.parentContainer = parentContainer;
+
+    this.waypointModel = waypointModel;
+    this.boardWypoints = [...this.waypointModel.getTasks()];
 
     render(this.EventListComponent, this.parentContainer);
     render(new FormEditView(), this.EventListComponent.getElement());
     render(new FormAddView(), this.EventListComponent.getElement());
 
-    for (let i = 0; i < WaypointCount; i++) {
-      render(new WaypointView(), this.EventListComponent.getElement());
+    for (let i = 0; i < this.boardWypoints.length; i++) {
+      render(new WaypointView(this.boardWypoints[i]), this.EventListComponent.getElement());
     }
   };
 }
