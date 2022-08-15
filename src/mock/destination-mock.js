@@ -1,4 +1,4 @@
-export const destinationTask = () => ({
+export const destinationMock = () => ({
   'id': 1,
   'description': 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
   'name': 'Chamonix',

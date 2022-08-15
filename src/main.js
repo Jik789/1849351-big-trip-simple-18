@@ -15,3 +15,4 @@ render(new FilterView(), siteFilterElement);
 render(new SortView(), siteTripEventElement);
 
 eventListPresenter.init(siteTripEventElement, waypointModel);
+

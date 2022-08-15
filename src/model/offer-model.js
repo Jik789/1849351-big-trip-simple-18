@@ -1,6 +1,6 @@
-import {offerTask} from '../mock/offer-task';
+import {offerMock} from '../mock/offer-mock';
 
 export default class OfferModel {
-  tasks = Array.from({length: 3}, offerTask);
+  tasks = Array.from({length: 3}, offerMock);
   getTasks = () => this.tasks;
 }

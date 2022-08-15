@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
 const humanizeDate = (dueDate) => dayjs(dueDate).format('D MMMM');
-// const isTaskExpired = (dueDate) => dueDate && dayjs().isAfter(dueDate, 'D');
+const getRandomNumber = (min,max) => Math.floor(Math.random() * ((max + 1) - min) + min);
 
-export {humanizeDate};
+export {humanizeDate, getRandomNumber};

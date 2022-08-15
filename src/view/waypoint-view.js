@@ -1,11 +1,17 @@
 import { createElement } from '../render.js';
 import { humanizeDate } from '../utils.js';
+import { destinationMock } from '../mock/destination-mock.js';
+
 
 const createWaypointTemplate = (waypoint) => {
-  const {basePrice, id, type, dateFrom, dateTo} = waypoint;
+  const {basePrice, id, type, dateFrom, dateTo, destination, offers} = waypoint;
 
   const dateFromReadble = humanizeDate(dateFrom);
   const dateToReadble = humanizeDate(dateTo);
+
+  if(destination === destinationMock().id) {
+    console.log('Совпадение')
+  }
 
   return (`
 <li class="trip-events__item">
