@@ -1,4 +1,5 @@
 import EventListView from '../view/event-list-view';
+
 import FormAddView from '../view/form-add-view';
 import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';

@@ -1,17 +1,17 @@
+// @ts-nocheck
+
 import { createElement } from '../render.js';
 import { humanizeDate } from '../utils.js';
 import { destinationMock } from '../mock/destination-mock.js';
 
 
 const createWaypointTemplate = (waypoint) => {
-  const {basePrice, id, type, dateFrom, dateTo, destination, offers} = waypoint;
+  const {basePrice, type, dateFrom, dateTo, destination} = waypoint;
 
   const dateFromReadble = humanizeDate(dateFrom);
   const dateToReadble = humanizeDate(dateTo);
 
-  if(destination === destinationMock().id) {
-    console.log('Совпадение')
-  }
+  const name = destinationMock().find((el) => (el.id === destination)).name;
 
   return (`
 <li class="trip-events__item">
@@ -20,7 +20,7 @@ const createWaypointTemplate = (waypoint) => {
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">Taxi Amsterdam</h3>
+    <h3 class="event__title">${type[0].toUpperCase()}${type.slice(1)} ${name}</h3>
     <div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
@@ -33,11 +33,6 @@ const createWaypointTemplate = (waypoint) => {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">20</span>
-      </li>
     </ul>
     <button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
