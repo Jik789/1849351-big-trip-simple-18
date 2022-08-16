@@ -6,7 +6,7 @@ export const waypointMock = () => ({
   'dateTo': '2019-07-11T11:22:13.375Z',
   'destination': getRandomNumber(1, 3),
   'id': '0',
-  'offers': [1, 2],
+  'offers': [getRandomNumber(1, 2), getRandomNumber(3, 4)],
   'type': 'bus'
 });
 

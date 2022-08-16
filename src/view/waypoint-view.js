@@ -6,7 +6,7 @@ import { destinationMock } from '../mock/destination-mock.js';
 
 
 const createWaypointTemplate = (waypoint) => {
-  const {basePrice, type, dateFrom, dateTo, destination} = waypoint;
+  const {basePrice, type, dateFrom, dateTo, destination, offers} = waypoint;
 
   const dateFromReadble = humanizeDate(dateFrom);
   const dateToReadble = humanizeDate(dateTo);

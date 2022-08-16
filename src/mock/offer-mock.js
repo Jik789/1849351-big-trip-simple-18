@@ -1,22 +1,24 @@
+import { getRandomNumber } from '../utils.js';
+
 export const offerMock = () => ([
   {
     'id': 1,
     'title': 'One',
-    'price': 120
+    'price': getRandomNumber(123, 320)
   },
   {
     'id': 2,
     'title': 'Two',
-    'price': 220
+    'price': getRandomNumber(123, 320)
   },
   {
     'id': 3,
     'title': 'Three',
-    'price': 320
+    'price': getRandomNumber(123, 320)
   },
   {
     'id': 4,
     'title': 'Four',
-    'price': 420
+    'price': getRandomNumber(123, 320)
   },
 ]);
