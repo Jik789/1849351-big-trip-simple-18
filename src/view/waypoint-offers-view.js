@@ -1,9 +1,7 @@
 import { createElement } from '../render.js';
-// import { offerMock } from '../mock/offer-mock';
 
 const createOffersWaypointTemplate = (offers) => {
   const {title, price} = offers;
-  console.log(offers)
   return (`
   <li class="event__offer">
     <span class="event__offer-title">${title}</span>
@@ -14,19 +12,18 @@ const createOffersWaypointTemplate = (offers) => {
 };
 
 export default class WaypointOffersView {
-  constructor(waypoint) {
-    this.waypoint = waypoint;
+  constructor(waypointOffers) {
+    this.waypointOffers = waypointOffers;
   }
 
   getTemplate() {
-    return createOffersWaypointTemplate(this.waypoint);
+    return createOffersWaypointTemplate(this.waypointOffers);
   }
 
   getElement() {
     if (!this.element) {
       this.element = createElement(this.getTemplate());
     }
-
     return this.element;
   }
 

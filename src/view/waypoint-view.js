@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { createElement } from '../render.js';
-import { humanizeDate } from '../utils.js';
+import { humanizeDate, humanizeTime, robotDate, robotDateTime } from '../utils.js';
 import { destinationMock } from '../mock/destination-mock.js';
 
 
@@ -11,21 +11,30 @@ const createWaypointTemplate = (waypoint) => {
   const dateFromReadble = humanizeDate(dateFrom);
   const dateToReadble = humanizeDate(dateTo);
 
+  const timeFromReadble = humanizeTime(dateFrom);
+  const timeToReadble = humanizeTime(dateTo);
+
+  const robotDateFrom = robotDate(dateFrom);
+  const robotDateTo = robotDate(dateTo);
+
+  const robotDateTimeFrom = robotDateTime(dateFrom);
+  const robotDateTimeTo = robotDateTime(dateTo);
+
   const name = destinationMock().find((el) => (el.id === destination)).name;
 
   return (`
 <li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">${dateFromReadble}</time>
+    <time class="event__date" datetime="${robotDateFrom}">${dateFromReadble}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${type[0].toUpperCase()}${type.slice(1)} ${name}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+        <time class="event__start-time" datetime="${robotDateTimeFrom}">${timeFromReadble}</time>
         &mdash;
-        <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+        <time class="event__end-time" datetime="${robotDateTimeTo}">${timeToReadble}</time>
       </p>
     </div>
     <p class="event__price">
