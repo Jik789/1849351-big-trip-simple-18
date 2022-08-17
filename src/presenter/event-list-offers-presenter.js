@@ -6,11 +6,11 @@ export default class EventListOffersPresenter {
   init = (parentContainer, offerModel) => {
     this.parentContainer = parentContainer;
     this.offerModel = offerModel;
-    this.offers = [...this.offerModel.getTasks()];
-    const waypointModels = new WaypointModel().getTasks();
+    this.offers = [...this.offerModel.get()];
+    const waypointModels = new WaypointModel().get();
 
-    console.log(waypointModels);
-    console.log(this.offers);
+    // console.log(waypointModels);
+    // console.log(this.offers);
 
     for (let i = 0; i < this.offers.length; i++) {
       render(new WaypointOffersView(this.offers[i]), this.parentContainer);

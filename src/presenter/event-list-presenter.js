@@ -12,7 +12,7 @@ export default class EventListPresenter {
     this.parentContainer = parentContainer;
 
     this.waypointModel = waypointModel;
-    this.boardWypoints = [...this.waypointModel.getTasks()];
+    this.boardWypoints = [...this.waypointModel.get()];
 
     render(this.EventListComponent, this.parentContainer);
     render(new FormEditView(), this.EventListComponent.getElement());

@@ -24,3 +24,6 @@ for (let i = 0; i < siteEventListOffersElement.length; i++) {
   const offerModel = new OfferModel();
   eventListOffersPresenter.init(siteEventListOffersElement[i], offerModel);
 }
+
+// import {getRandomValue} from './utils';
+// console.log(getRandomValue(['1', '2', '3']));

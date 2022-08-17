@@ -5,6 +5,7 @@ const humanizeTime = (dueDate) => dayjs(dueDate).format('HH:mm');
 const robotDate = (dueDate) => dayjs(dueDate).format('YYYY-MM-DD');
 const robotDateTime = (dueDate) => dayjs(dueDate).format('YYYY-MM-DDTHH:mm');
 
-const getRandomNumber = (min,max) => Math.floor(Math.random() * ((max + 1) - min) + min);
+const getRandomNumberOfRange = (min,max) => Math.floor(Math.random() * ((max + 1) - min) + min);
+const getRandomValue = (items) => items[getRandomNumberOfRange(0, items.length - 1)];
 
-export {humanizeDate, getRandomNumber, humanizeTime, robotDate, robotDateTime};
+export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime};

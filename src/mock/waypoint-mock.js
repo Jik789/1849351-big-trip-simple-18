@@ -1,12 +1,26 @@
-import { getRandomNumber } from '../utils.js';
+import { getRandomNumberOfRange, getRandomValue } from '../utils.js';
+import {basePriceMock, dateFromMock, dateToMock, typeMock} from './const-mock';
+import { offerMock } from './offer-mock';
 
 export const waypointMock = () => ({
-  'basePrice': 1100,
-  'dateFrom': '2019-07-10T22:55:56.845Z',
-  'dateTo': '2019-07-11T11:22:13.375Z',
-  'destination': getRandomNumber(1, 3),
-  'id': '0',
-  'offers': [getRandomNumber(1, 2), getRandomNumber(3, 4)],
-  'type': 'bus'
+  'basePrice': getRandomValue(basePriceMock),
+  'dateFrom': getRandomValue(dateFromMock),
+  'dateTo': getRandomValue(dateToMock),
+  'destination': getRandomNumberOfRange(1, 3), // НАДО СВЯЗАТЬ ЭТО
+  'id': getRandomNumberOfRange(1, 4),
+  'offers': [getRandomNumberOfRange(1,2), getRandomNumberOfRange(3,4)], // НАДО СВЯЗАТЬ ЭТО
+  'type': getRandomValue(typeMock),
 });
 
+const generateWaypoint = () => {
+  const waypoints = Array.from({length: 3}, waypointMock);
+
+  let totalWaypointCount = 0;
+
+  return waypoints.map((waypoint, index) => {
+    console.log(waypoint)
+    return '123'
+  })
+};
+
+generateWaypoint()
