@@ -12,15 +12,15 @@ export const waypointMock = () => ({
   'type': getRandomValue(typeMock),
 });
 
-const generateWaypoint = () => {
-  const waypoints = Array.from({length: 3}, waypointMock);
+// const generateWaypoint = () => {
+//   const waypoints = Array.from({length: 3}, waypointMock);
 
-  let totalWaypointCount = 0;
+//   let totalWaypointCount = 0;
 
-  return waypoints.map((waypoint, index) => {
-    console.log(waypoint)
-    return '123'
-  })
-};
+//   return waypoints.map((waypoint, index) => {
+//     console.log(waypoint)
+//     return '123'
+//   })
+// };
 
-generateWaypoint()
+// generateWaypoint()

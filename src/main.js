@@ -18,12 +18,10 @@ const eventListPresenter = new EventListPresenter();
 const waypointModel = new WaypointModel();
 eventListPresenter.init(siteTripEventElement, waypointModel);
 
-const siteEventListOffersElement = [...document.querySelectorAll('.event__selected-offers')];
-for (let i = 0; i < siteEventListOffersElement.length; i++) {
-  const eventListOffersPresenter = new EventListOffersPresenter();
-  const offerModel = new OfferModel();
-  eventListOffersPresenter.init(siteEventListOffersElement[i], offerModel);
-}
+// const siteEventListOffersElement = [...document.querySelectorAll('.event__selected-offers')];
+// for (let i = 0; i < siteEventListOffersElement.length; i++) {
+//   const eventListOffersPresenter = new EventListOffersPresenter();
+//   const offerModel = new OfferModel();
+//   eventListOffersPresenter.init(siteEventListOffersElement[i], offerModel);
+// }
 
-// import {getRandomValue} from './utils';
-// console.log(getRandomValue(['1', '2', '3']));
