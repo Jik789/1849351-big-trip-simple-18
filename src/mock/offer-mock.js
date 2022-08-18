@@ -1,24 +1,8 @@
-import { getRandomNumberOfRange } from '../utils.js';
+import { getRandomNumberOfRange, getRandomValue } from '../utils.js';
+import { typeMock } from './const-mock';
 
-export const offerMock = () => ([
-  {
-    'id': 1,
-    'title': 'One',
-    'price': getRandomNumberOfRange(123, 320)
-  },
-  {
-    'id': 2,
-    'title': 'Two',
-    'price': getRandomNumberOfRange(123, 320)
-  },
-  {
-    'id': 3,
-    'title': 'Three',
-    'price': getRandomNumberOfRange(123, 320)
-  },
-  {
-    'id': 4,
-    'title': 'Four',
-    'price': getRandomNumberOfRange(123, 320)
-  },
-]);
+export const offerMock = (keyId) => ({
+  'id': keyId,
+  'title': getRandomValue(typeMock),
+  'price': getRandomNumberOfRange(123, 320)
+});

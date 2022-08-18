@@ -1,25 +1,28 @@
+import { render } from '../render.js';
 import EventListView from '../view/event-list-view';
-
 import FormAddView from '../view/form-add-view';
 import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';
-import { render } from '../render.js';
+import WaypointModel from '../model/waypoint-model';
 
 export default class EventListPresenter {
   EventListComponent = new EventListView();
 
-  init = (parentContainer, waypointModel) => {
+  init = (parentContainer) => {
     this.parentContainer = parentContainer;
-
-    this.waypointModel = waypointModel;
-    this.boardWypoints = [...this.waypointModel.get()];
+    this.waypointsModel = new WaypointModel();
+    this.waypoints = this.waypointsModel.getWaypoints();
 
     render(this.EventListComponent, this.parentContainer);
     render(new FormEditView(), this.EventListComponent.getElement());
     render(new FormAddView(), this.EventListComponent.getElement());
 
-    for (let i = 0; i < this.boardWypoints.length; i++) {
-      render(new WaypointView(this.boardWypoints[i]), this.EventListComponent.getElement());
+    for (let i = 0; i < this.waypoints.length; i++) {
+      render( new WaypointView(
+        this.waypoints[i],
+        this.waypointsModel.getWaypointOffers(this.waypoints[i]),
+        this.waypointsModel.getWaypointDestinations(this.waypoints[i])
+      ), this.EventListComponent.getElement());
     }
   };
 }
