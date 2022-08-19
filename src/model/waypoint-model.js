@@ -15,5 +15,5 @@ export default class WaypointModel {
 
   getWaypointOffers = (wayPoint) => wayPoint.offers.map((offerId) => this.offers.find((offer) => offer.id === offerId));
 
-  getWaypointOffersByType = (wayPoint) => this.offersByType.filter((offerType) => offerType.type === wayPoint.type)[0];
+  getWaypointOffersByType = (wayPoint) => this.offersByType.find((offerType) => offerType.type === wayPoint.type);
 }
