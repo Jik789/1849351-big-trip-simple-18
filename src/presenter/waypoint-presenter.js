@@ -14,8 +14,14 @@ export default class EventListPresenter {
     this.waypoints = this.waypointsModel.getWaypoints();
 
     render(this.EventListComponent, this.parentContainer);
-    render(new FormEditView(), this.EventListComponent.getElement());
+    render(new FormEditView(
+      this.waypoints[0],
+      this.waypointsModel.getWaypointOffers(this.waypoints[0]),
+      this.waypointsModel.getWaypointDestinations(this.waypoints[0]),
+      this.waypointsModel.getWaypointOffersByType(this.waypoints[0])
+    ), this.EventListComponent.getElement());
     render(new FormAddView(), this.EventListComponent.getElement());
+
 
     for (let i = 0; i < this.waypoints.length; i++) {
       render( new WaypointView(
