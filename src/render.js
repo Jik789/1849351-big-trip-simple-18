@@ -13,6 +13,7 @@ const createElement = (template) => {
 };
 
 const render = (component, container, place = RenderPosition.BEFOREEND) => {
+  console.log(component.getElement())
   container.insertAdjacentElement(place, component.getElement());
 };
 
