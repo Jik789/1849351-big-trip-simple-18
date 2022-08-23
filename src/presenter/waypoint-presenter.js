@@ -39,15 +39,38 @@ export default class EventListPresenter {
       this.waypointsModel.getWaypointDestinations(this.waypoints[wayPointsNumber]),
       this.waypointsModel.getWaypointOffersByType(this.waypoints[wayPointsNumber])
     );
-    // console.log(waypointComponentEdit.element)
 
     const replaceCardToForm = () => {
-      this.#EventListComponent.element.replaceChild(waypointComponentEdit.element, waypointComponent.element);
+      this.#EventListComponent.getElement().replaceChild(waypointComponentEdit.getElement(), waypointComponent.getElement());
     };
 
     const replaceFormToCard = () => {
-      this.#EventListComponent.element.replaceChild(waypointComponent.element, waypointComponentEdit.element);
+      this.#EventListComponent.getElement().replaceChild(waypointComponent.getElement(), waypointComponentEdit.getElement());
     };
+
+    const onEscKeyDown = (event) => {
+      if (event.key === 'Escape' || event.key === 'Esc') {
+        event.preventDefault();
+        replaceFormToCard();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
+    waypointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceCardToForm();
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
+    waypointComponentEdit.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceFormToCard();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    waypointComponentEdit.getElement().querySelector('.event--edit').addEventListener('submit', (event) => {
+      event.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
 
     render(waypointComponent, this.#EventListComponent.getElement());
   };
