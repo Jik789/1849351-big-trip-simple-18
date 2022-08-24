@@ -4,16 +4,18 @@ import { offerMock, offerByTypeMock } from '../mock/offer-mock';
 import { waypointMock } from '../mock/waypoint-mock';
 
 export default class WaypointModel {
-  wayPoints = Array.from({length: WAYPOINT_COUNT}, waypointMock);
-  destinations = Array.from({length: WAYPOINT_COUNT}, (_value, index) => destinationMock(index + 1));
-  offers = Array.from({length: WAYPOINT_COUNT}, (_value, index) => offerMock(index + 1));
-  offersByType = offerByTypeMock();
+  #wayPoints = Array.from({length: WAYPOINT_COUNT}, waypointMock);
+  #destinations = Array.from({length: WAYPOINT_COUNT}, (_value, index) => destinationMock(index + 1));
+  #offers = Array.from({length: WAYPOINT_COUNT}, (_value, index) => offerMock(index + 1));
+  #offersByType = offerByTypeMock();
 
-  getWaypoints = () => this.wayPoints;
+  get waypoints() {
+    return this.#wayPoints;
+  }
 
-  getWaypointDestinations = (wayPoint) => this.destinations.find((destination) => wayPoint.destination === destination.id);
+  getWaypointDestinations = (wayPoint) => this.#destinations.find((destination) => wayPoint.destination === destination.id);
 
-  getWaypointOffers = (wayPoint) => wayPoint.offers.map((offerId) => this.offers.find((offer) => offer.id === offerId));
+  getWaypointOffers = (wayPoint) => wayPoint.offers.map((offerId) => this.#offers.find((offer) => offer.id === offerId));
 
-  getWaypointOffersByType = (wayPoint) => this.offersByType.find((offerType) => offerType.type === wayPoint.type);
+  getWaypointOffersByType = (wayPoint) => this.#offersByType.find((offerType) => offerType.type === wayPoint.type);
 }
