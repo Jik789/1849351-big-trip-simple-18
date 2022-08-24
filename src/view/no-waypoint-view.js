@@ -1,14 +1,14 @@
 // @ts-nocheck
 import { createElement } from '../render.js';
 
-const createEventListTemplate = () => `<ul class="trip-events__list">
-</ul>`;
+const createNoWaypointTemplate = () => `<p class="trip-events__msg">
+Click New Event to create your first point</p>`;
 
-export default class EventListView {
+export default class NoWaypointView {
   #element = null;
 
   get template() {
-    return createEventListTemplate();
+    return createNoWaypointTemplate();
   }
 
   get element() {
