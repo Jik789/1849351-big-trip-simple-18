@@ -2,10 +2,10 @@
 
 import { render } from '../render.js';
 import EventListView from '../view/event-list-view';
-import FormAddView from '../view/form-add-view';
 import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';
 import WaypointModel from '../model/waypoint-model';
+import NoWaypointView from '../view/no-waypoint-view';
 
 export default class EventListPresenter {
   #EventListComponent = new EventListView();
@@ -16,11 +16,13 @@ export default class EventListPresenter {
     this.waypoints = this.waypointsModel.waypoints;
 
     render(this.#EventListComponent, this.parentContainer);
-    // render(new FormAddView(), this.EventListComponent.getElement());
 
-
-    for (let i = 0; i < this.waypoints.length; i++) {
-      this.#renderWayPoints(i);
+    if (!this.waypoints.length) {
+      render(new NoWaypointView(), this.#EventListComponent.element);
+    } else {
+      for (let i = 0; i < this.waypoints.length; i++) {
+        this.#renderWayPoints(i);
+      }
     }
   };
 
@@ -41,11 +43,11 @@ export default class EventListPresenter {
     );
 
     const replaceCardToForm = () => {
-      this.#EventListComponent.getElement().replaceChild(waypointComponentEdit.getElement(), waypointComponent.getElement());
+      this.#EventListComponent.element.replaceChild(waypointComponentEdit.element, waypointComponent.element);
     };
 
     const replaceFormToCard = () => {
-      this.#EventListComponent.getElement().replaceChild(waypointComponent.getElement(), waypointComponentEdit.getElement());
+      this.#EventListComponent.element.replaceChild(waypointComponent.element, waypointComponentEdit.element);
     };
 
     const onEscKeyDown = (event) => {
@@ -56,22 +58,22 @@ export default class EventListPresenter {
       }
     };
 
-    waypointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    waypointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceCardToForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    waypointComponentEdit.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    waypointComponentEdit.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceFormToCard();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    waypointComponentEdit.getElement().querySelector('.event--edit').addEventListener('submit', (event) => {
+    waypointComponentEdit.element.querySelector('.event--edit').addEventListener('submit', (event) => {
       event.preventDefault();
       replaceFormToCard();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    render(waypointComponent, this.#EventListComponent.getElement());
+    render(waypointComponent, this.#EventListComponent.element);
   };
 }

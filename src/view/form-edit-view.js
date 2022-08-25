@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { createElement } from '../render.js';
 import { humanizeDateTime } from '../utils.js';
 
@@ -136,26 +138,32 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
 `);};
 
 export default class FormEditView {
+  #element = null;
+  #waypoint = null;
+  #offers = null;
+  #destination = null;
+  #offersByType = null;
+
   constructor(waypoint, offers, destination, offersByType) {
-    this.waypoint = waypoint;
-    this.offers = offers;
-    this.destination = destination;
-    this.offersByType = offersByType;
+    this.#waypoint = waypoint;
+    this.#offers = offers;
+    this.#destination = destination;
+    this.#offersByType = offersByType;
   }
 
-  getTemplate() {
-    return createFormEditTemplate(this.waypoint, this.offers, this.destination, this.offersByType);
+  get template() {
+    return createFormEditTemplate(this.#waypoint, this.#offers, this.#destination, this.#offersByType);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

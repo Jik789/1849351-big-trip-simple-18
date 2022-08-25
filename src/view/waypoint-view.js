@@ -9,13 +9,10 @@ const createWaypointTemplate = (waypoint, offers, destination) => {
   const dateTo = waypoint.dateTo;
 
   const dateFromReadble = humanizeDate(dateFrom);
-  const dateToReadble = humanizeDate(dateTo);
-
   const timeFromReadble = humanizeTime(dateFrom);
   const timeToReadble = humanizeTime(dateTo);
 
   const robotDateFrom = robotDate(dateFrom);
-  const robotDateTo = robotDate(dateTo);
 
   const robotDateTimeFrom = robotDateTime(dateFrom);
   const robotDateTimeTo = robotDateTime(dateTo);
@@ -60,23 +57,30 @@ const createWaypointTemplate = (waypoint, offers, destination) => {
 };
 
 export default class WaypointView {
+  #element = null;
+  #waypoint = null;
+  #offers = null;
+  #destination = null;
+
   constructor(waypoint, offers, destination) {
-    this.waypoint = waypoint;
-    this.offers = offers;
-    this.destination = destination;
+    this.#waypoint = waypoint;
+    this.#offers = offers;
+    this.#destination = destination;
   }
 
-  getTemplate = () => createWaypointTemplate(this.waypoint, this.offers, this.destination);
+  get template() {
+    return createWaypointTemplate(this.#waypoint, this.#offers, this.#destination);
+  }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
