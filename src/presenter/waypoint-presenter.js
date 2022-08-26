@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 import EventListView from '../view/event-list-view';
 import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';
@@ -8,46 +8,46 @@ import WaypointModel from '../model/waypoint-model';
 import NoWaypointView from '../view/no-waypoint-view';
 
 export default class EventListPresenter {
-  #EventListComponent = new EventListView();
+  #eventListComponent = new EventListView();
 
   init = (parentContainer) => {
     this.parentContainer = parentContainer;
     this.waypointsModel = new WaypointModel();
     this.waypoints = this.waypointsModel.waypoints;
 
-    render(this.#EventListComponent, this.parentContainer);
+    render(this.#eventListComponent, this.parentContainer);
 
-    if (!this.waypoints.length) {
-      render(new NoWaypointView(), this.#EventListComponent.element);
+    if (!(this.waypoints.length > 0)) {
+      render(new NoWaypointView(), this.#eventListComponent.element);
     } else {
       for (let i = 0; i < this.waypoints.length; i++) {
-        this.#renderWayPoints(i);
+        this.#renderWayPoints(this.waypoints[i]);
       }
     }
   };
 
-  #renderWayPoints = (wayPointsNumber) => {
+  #renderWayPoints = (wayPoint) => {
     this.waypointsModel = new WaypointModel();
     this.waypoints = this.waypointsModel.waypoints;
 
     const waypointComponent = new WaypointView(
-      this.waypoints[wayPointsNumber],
-      this.waypointsModel.getWaypointOffers(this.waypoints[wayPointsNumber]),
-      this.waypointsModel.getWaypointDestinations(this.waypoints[wayPointsNumber])
+      wayPoint,
+      this.waypointsModel.getWaypointOffers(wayPoint),
+      this.waypointsModel.getWaypointDestinations(wayPoint)
     );
     const waypointComponentEdit = new FormEditView(
-      this.waypoints[wayPointsNumber],
-      this.waypointsModel.getWaypointOffers(this.waypoints[wayPointsNumber]),
-      this.waypointsModel.getWaypointDestinations(this.waypoints[wayPointsNumber]),
-      this.waypointsModel.getWaypointOffersByType(this.waypoints[wayPointsNumber])
+      wayPoint,
+      this.waypointsModel.getWaypointOffers(wayPoint),
+      this.waypointsModel.getWaypointDestinations(wayPoint),
+      this.waypointsModel.getWaypointOffersByType(wayPoint)
     );
 
     const replaceCardToForm = () => {
-      this.#EventListComponent.element.replaceChild(waypointComponentEdit.element, waypointComponent.element);
+      this.#eventListComponent.element.replaceChild(waypointComponentEdit.element, waypointComponent.element);
     };
 
     const replaceFormToCard = () => {
-      this.#EventListComponent.element.replaceChild(waypointComponent.element, waypointComponentEdit.element);
+      this.#eventListComponent.element.replaceChild(waypointComponent.element, waypointComponentEdit.element);
     };
 
     const onEscKeyDown = (event) => {
@@ -58,22 +58,21 @@ export default class EventListPresenter {
       }
     };
 
-    waypointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    waypointComponent.setClickHandler(() => {
       replaceCardToForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    waypointComponentEdit.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    waypointComponentEdit.setClickHandler(() => {
       replaceFormToCard();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    waypointComponentEdit.element.querySelector('.event--edit').addEventListener('submit', (event) => {
-      event.preventDefault();
+    waypointComponentEdit.setSubmitHandler(() => {
       replaceFormToCard();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    render(waypointComponent, this.#EventListComponent.element);
+    render(waypointComponent, this.#eventListComponent.element);
   };
 }

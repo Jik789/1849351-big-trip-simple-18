@@ -1,3 +1,4 @@
+// @ts-nocheck
 import AbstractView from './abstract-view.js';
 
 /**
