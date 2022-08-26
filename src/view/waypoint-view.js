@@ -1,7 +1,7 @@
 // @ts-nocheck
 
-import { createElement } from '../render.js';
 import { humanizeDate, humanizeTime, robotDate, robotDateTime } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 
 const createWaypointTemplate = (waypoint, offers, destination) => {
@@ -56,13 +56,13 @@ const createWaypointTemplate = (waypoint, offers, destination) => {
 `);
 };
 
-export default class WaypointView {
-  #element = null;
+export default class WaypointView extends AbstractView {
   #waypoint = null;
   #offers = null;
   #destination = null;
 
   constructor(waypoint, offers, destination) {
+    super();
     this.#waypoint = waypoint;
     this.#offers = offers;
     this.#destination = destination;
@@ -70,17 +70,5 @@ export default class WaypointView {
 
   get template() {
     return createWaypointTemplate(this.#waypoint, this.#offers, this.#destination);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

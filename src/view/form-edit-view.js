@@ -1,7 +1,8 @@
 // @ts-nocheck
 
-import { createElement } from '../render.js';
 import { humanizeDateTime } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import { DEFAULT_WAY_POINT } from '../mock/const-mock.js';
 
 const createFormEditTemplate = (waypoint, offers, destination, offersByType) => {
   const dateFrom = waypoint.dateFrom;
@@ -31,7 +32,7 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
       <span class="visually-hidden">Choose event type</span>
       <img class="event__type-icon" width="17" height="17" src="img/icons/${waypoint.type}.png" alt="Event type icon">
     </label>
-    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+    <input class="event__type-toggle visually-hidden" id="event-type-toggle-1" type="checkbox">
 
     <div class="event__type-list">
       <fieldset class="event__type-group">
@@ -135,16 +136,17 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
 </section>
 </form>
 </li>
-`);};
+`);
+};
 
-export default class FormEditView {
-  #element = null;
+export default class FormEditView extends AbstractView {
   #waypoint = null;
   #offers = null;
   #destination = null;
   #offersByType = null;
 
-  constructor(waypoint, offers, destination, offersByType) {
+  constructor(waypoint = DEFAULT_WAY_POINT, offers, destination, offersByType) {
+    super();
     this.#waypoint = waypoint;
     this.#offers = offers;
     this.#destination = destination;
@@ -153,17 +155,5 @@ export default class FormEditView {
 
   get template() {
     return createFormEditTemplate(this.#waypoint, this.#offers, this.#destination, this.#offersByType);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
