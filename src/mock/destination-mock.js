@@ -1,4 +1,4 @@
-import { getRandomNumberOfRange, getRandomValue } from '../utils.js';
+import { getRandomValue } from '../utils.js';
 import { nameMock } from './const-mock';
 
 export const destinationMock = (keyId) => ({
