@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { humanizeDate, humanizeTime, robotDate, robotDateTime } from '../utils.js';
+import { humanizeDate, humanizeTime, robotDate, robotDateTime } from '../utils/utils.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 
