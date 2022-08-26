@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { humanizeDateTime } from '../utils.js';
+import { humanizeDateTime } from '../utils/utils.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { DEFAULT_WAY_POINT } from '../mock/const-mock.js';
 

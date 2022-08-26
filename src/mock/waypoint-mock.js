@@ -1,4 +1,4 @@
-import { getRandomNumberOfRange, getRandomValue } from '../utils.js';
+import { getRandomNumberOfRange, getRandomValue } from '../utils/utils.js';
 import { BASE_PRICE_MOCK, DATE_FROM_MOCK, DATE_TO_MOCK, TYPE_MOCK } from './const-mock';
 
 export const waypointMock = (keyId) => ({
