@@ -157,23 +157,23 @@ export default class FormEditView extends AbstractView {
     return createFormEditTemplate(this.#waypoint, this.#offers, this.#destination, this.#offersByType);
   }
 
-  setRollupClickHandler = (callback) => {
-    this._callback.rollupClick = callback;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupClickHandler);
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   };
 
-  #rollupClickHandler = (event) => {
+  #clickHandler = (event) => {
     event.preventDefault();
-    this._callback.rollupClick();
+    this._callback.click();
   };
 
-  setRollupSubmitHandler = (callback) => {
-    this._callback.rollupSubmit = callback;
-    this.element.querySelector('.event--edit').addEventListener('submit', this.#rollupSubmitHandler);
+  setSubmitHandler = (callback) => {
+    this._callback.submit = callback;
+    this.element.querySelector('.event--edit').addEventListener('submit', this.#SubmitHandler);
   };
 
-  #rollupSubmitHandler = (event) => {
+  #SubmitHandler = (event) => {
     event.preventDefault();
-    this._callback.rollupSubmit();
+    this._callback.submit();
   };
 }

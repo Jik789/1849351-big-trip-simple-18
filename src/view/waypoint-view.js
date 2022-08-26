@@ -72,13 +72,13 @@ export default class WaypointView extends AbstractView {
     return createWaypointTemplate(this.#waypoint, this.#offers, this.#destination);
   }
 
-  setRollupClickHandler = (callback) => {
-    this._callback.rollupClick = callback;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupClickHandler);
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   };
 
-  #rollupClickHandler = (event) => {
+  #clickHandler = (event) => {
     event.preventDefault();
-    this._callback.rollupClick();
+    this._callback.click();
   };
 }

@@ -58,17 +58,17 @@ export default class EventListPresenter {
       }
     };
 
-    waypointComponent.setRollupClickHandler(() => {
+    waypointComponent.setClickHandler(() => {
       replaceCardToForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    waypointComponentEdit.setRollupClickHandler(() => {
+    waypointComponentEdit.setClickHandler(() => {
       replaceFormToCard();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    waypointComponentEdit.setRollupSubmitHandler(() => {
+    waypointComponentEdit.setSubmitHandler(() => {
       replaceFormToCard();
       document.removeEventListener('keydown', onEscKeyDown);
     });
