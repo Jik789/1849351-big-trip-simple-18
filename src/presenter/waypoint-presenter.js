@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 import EventListView from '../view/event-list-view';
 import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';
@@ -58,18 +58,17 @@ export default class EventListPresenter {
       }
     };
 
-    waypointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    waypointComponent.setRollupClickHandler(() => {
       replaceCardToForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    waypointComponentEdit.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    waypointComponentEdit.setRollupClickHandler(() => {
       replaceFormToCard();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    waypointComponentEdit.element.querySelector('.event--edit').addEventListener('submit', (event) => {
-      event.preventDefault();
+    waypointComponentEdit.setRollupSubmitHandler(() => {
       replaceFormToCard();
       document.removeEventListener('keydown', onEscKeyDown);
     });
