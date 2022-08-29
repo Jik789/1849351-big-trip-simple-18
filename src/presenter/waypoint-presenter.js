@@ -1,78 +1,118 @@
 // @ts-nocheck
-
-import { render } from '../framework/render.js';
-import EventListView from '../view/event-list-view';
 import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';
+import { render, replace, remove } from '../framework/render.js';
 import WaypointModel from '../model/waypoint-model';
-import NoWaypointView from '../view/no-waypoint-view';
 
-export default class EventListPresenter {
-  #eventListComponent = new EventListView();
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
 
-  init = (parentContainer) => {
-    this.parentContainer = parentContainer;
+export default class WaypointPresenter {
+  #waypointListContainer = null;
+  #waypointComponent = null;
+  #waypointComponentEdit = null;
+  #changeData = null;
+  #changeMode = null;
+
+  #waypoint = null;
+  #mode = Mode.DEFAULT;
+
+  constructor(waypointListContainer, changeData, changeMode) {
+    this.#waypointListContainer = waypointListContainer;
+    this.#changeData = changeData;
+    this.#changeMode = changeMode;
+  }
+
+  init = (waypoint) => {
+    this.#waypoint = waypoint;
     this.waypointsModel = new WaypointModel();
     this.waypoints = this.waypointsModel.waypoints;
 
-    render(this.#eventListComponent, this.parentContainer);
+    const prevWaypointComponent = this.#waypointComponent;
+    const prevWaypointComponentEdit = this.#waypointComponentEdit;
 
-    if (!(this.waypoints.length > 0)) {
-      render(new NoWaypointView(), this.#eventListComponent.element);
-    } else {
-      for (let i = 0; i < this.waypoints.length; i++) {
-        this.#renderWayPoints(this.waypoints[i]);
-      }
+    this.#waypointComponent = new WaypointView(
+      waypoint,
+      this.waypointsModel.getWaypointOffers(waypoint),
+      this.waypointsModel.getWaypointDestinations(waypoint)
+    );
+
+    this.#waypointComponentEdit = new FormEditView(
+      waypoint,
+      this.waypointsModel.getWaypointOffers(waypoint),
+      this.waypointsModel.getWaypointDestinations(waypoint),
+      this.waypointsModel.getWaypointOffersByType(waypoint)
+    );
+
+    this.#waypointComponent.setClickHandler(this.#setClickCardToForm);
+    this.#waypointComponentEdit.setClickHandler(this.#setClickFormToCard);
+    this.#waypointComponentEdit.setSubmitHandler(this.#setSubmitHandler);
+
+    if (prevWaypointComponent === null || prevWaypointComponentEdit === null) {
+      render(this.#waypointComponent, this.#waypointListContainer);
+      return;
+    }
+
+    // Проверка на наличие в DOM необходима,
+    // чтобы не пытаться заменить то, что не было отрисовано
+    if (this.#mode === Mode.DEFAULT) {
+      replace(this.#waypointComponent, prevWaypointComponent);
+    }
+
+    if (this.#mode === Mode.EDITING) {
+      replace(this.#waypointComponentEdit, prevWaypointComponentEdit);
+    }
+
+    remove(prevWaypointComponent);
+    remove(prevWaypointComponentEdit);
+  };
+
+  destroy = () => {
+    remove(this.#waypointComponent);
+    remove(this.#waypointComponentEdit);
+  };
+
+  resetView = () => {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceFormToCard();
     }
   };
 
-  #renderWayPoints = (wayPoint) => {
-    this.waypointsModel = new WaypointModel();
-    this.waypoints = this.waypointsModel.waypoints;
+  #onEscKeyDown = (event) => {
+    if (event.key === 'Escape' || event.key === 'Esc') {
+      event.preventDefault();
+      this.#replaceFormToCard();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
+    }
+  };
 
-    const waypointComponent = new WaypointView(
-      wayPoint,
-      this.waypointsModel.getWaypointOffers(wayPoint),
-      this.waypointsModel.getWaypointDestinations(wayPoint)
-    );
-    const waypointComponentEdit = new FormEditView(
-      wayPoint,
-      this.waypointsModel.getWaypointOffers(wayPoint),
-      this.waypointsModel.getWaypointDestinations(wayPoint),
-      this.waypointsModel.getWaypointOffersByType(wayPoint)
-    );
+  #replaceCardToForm = () => {
+    replace(this.#waypointComponentEdit, this.#waypointComponent);
+    document.addEventListener('keydown', this.#onEscKeyDown);
+    this.#changeMode();
+    this.#mode = Mode.EDITING;
+  };
 
-    const replaceCardToForm = () => {
-      this.#eventListComponent.element.replaceChild(waypointComponentEdit.element, waypointComponent.element);
-    };
+  #replaceFormToCard = () => {
+    replace(this.#waypointComponent, this.#waypointComponentEdit);
+    document.removeEventListener('keydown', this.#onEscKeyDown);
+    this.#mode = Mode.DEFAULT;
+  };
 
-    const replaceFormToCard = () => {
-      this.#eventListComponent.element.replaceChild(waypointComponent.element, waypointComponentEdit.element);
-    };
+  #setClickCardToForm = () => {
+    this.#replaceCardToForm();
+    document.addEventListener('keydown', this.#onEscKeyDown);
+  };
 
-    const onEscKeyDown = (event) => {
-      if (event.key === 'Escape' || event.key === 'Esc') {
-        event.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
+  #setClickFormToCard = () => {
+    this.#replaceFormToCard();
+    document.removeEventListener('keydown', this.#onEscKeyDown);
+  };
 
-    waypointComponent.setClickHandler(() => {
-      replaceCardToForm();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    waypointComponentEdit.setClickHandler(() => {
-      replaceFormToCard();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    waypointComponentEdit.setSubmitHandler(() => {
-      replaceFormToCard();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    render(waypointComponent, this.#eventListComponent.element);
+  #setSubmitHandler = () => {
+    this.#replaceFormToCard();
+    document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 }
