@@ -4,7 +4,7 @@ import { offerMock, offerByTypeMock } from '../mock/offer-mock';
 import { waypointMock } from '../mock/waypoint-mock';
 
 export default class WaypointModel {
-  #wayPoints = Array.from({length: 4}, (_value, index) => waypointMock(index + 1));
+  #wayPoints = Array.from({length: WAYPOINT_COUNT}, (_value, index) => waypointMock(index + 1));
   #destinations = Array.from({length: WAYPOINT_COUNT}, (_value, index) => destinationMock(index + 1));
   #offers = Array.from({length: WAYPOINT_COUNT}, (_value, index) => offerMock(index + 1));
   #offersByType = offerByTypeMock();
