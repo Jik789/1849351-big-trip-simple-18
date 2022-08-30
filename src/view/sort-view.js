@@ -43,7 +43,6 @@ export default class SortView extends AbstractView {
 
   #sortTypeChangeHandler = (event) => {
     if (event.target.tagName !== 'LABEL') {
-      console.log('Это не то');
       return;
     }
 

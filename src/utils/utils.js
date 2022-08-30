@@ -41,10 +41,10 @@ const getWeightForNullDate = (dateA, dateB) => {
 };
 
 const sortTaskDown = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
-
-  return weight ?? dayjs(taskB.dueDate).diff(dayjs(taskA.dueDate));
+  return;
 };
 
+const sortWaypointPrice = (taskA, taskB) => taskA.basePrice - taskB.basePrice;
 
-export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortTaskDown};
+
+export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortTaskDown, sortWaypointPrice};

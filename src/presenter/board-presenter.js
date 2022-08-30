@@ -6,7 +6,7 @@ import WaypointModel from '../model/waypoint-model';
 import NoWaypointView from '../view/no-waypoint-view';
 import SortView from '../view/sort-view';
 import WaypointPresenter from './waypoint-presenter';
-import { updateItem, sortTaskDown } from '../utils/utils';
+import { updateItem, sortTaskDown, sortWaypointPrice } from '../utils/utils';
 import {SortType} from '../const.js';
 
 export default class BoardPresenter {
@@ -17,6 +17,8 @@ export default class BoardPresenter {
   #waypointPresenter = new Map();
   #renderedWaypointCount = null;
   #currentSortType = SortType.DAY;
+  waypoints = [];
+  sourcedWaypoints = [];
 
   init = (parentContainer) => {
     this.parentContainer = parentContainer;
@@ -64,6 +66,7 @@ export default class BoardPresenter {
 
   #handleWaypointChange = (waypointUpdate) => {
     this.waypoints = updateItem(this.waypoints, waypointUpdate);
+    this.sourcedWaypoints = updateItem(this.sourcedWaypoints, waypointUpdate);
     this.#waypointPresenter.get(waypointUpdate.id).init(waypointUpdate);
   };
 
@@ -72,25 +75,33 @@ export default class BoardPresenter {
   };
 
   #handleSortTypeChange = (sortType) => {
-    // - Сортируем задачи
-    // - Очищаем список
-    // - Рендерим список заново
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortWaypoints(sortType);
   };
 
   #sortWaypoints = (sortType) => {
-    // 2. Этот исходный массив задач необходим,
-    // потому что для сортировки мы будем мутировать
-    // массив в свойстве _boardTasks
     switch (sortType) {
       case SortType.DAY:
         this.waypoints.sort(sortTaskDown);
         break;
+      case SortType.PRICE:
+        this.waypoints.sort(sortWaypointPrice);
+        break;
       default:
-        // 3. А когда пользователь захочет "вернуть всё, как было",
-        // мы просто запишем в _boardTasks исходный массив
         this.waypoints = [...this.sourcedWaypoints];
     }
 
     this.#currentSortType = sortType;
+    this.#clearWaypointList();
+
+    if (!(this.waypoints.length > 0)) {
+      this.#renderNowayPoints();
+    } else {
+      for (let i = 0; i < this.waypoints.length; i++) {
+        this.#renderWayPoints(this.waypoints[i]);
+      }
+    }
   };
 }
