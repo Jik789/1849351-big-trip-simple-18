@@ -6,8 +6,8 @@ import WaypointModel from '../model/waypoint-model';
 import NoWaypointView from '../view/no-waypoint-view';
 import SortView from '../view/sort-view';
 import WaypointPresenter from './waypoint-presenter';
-import { updateItem, sortTaskDown, sortWaypointPrice } from '../utils/utils';
-import {SortType} from '../const.js';
+import { updateItem, sortWaypointDay, sortWaypointPrice } from '../utils/utils';
+import { SortType } from '../const.js';
 
 export default class BoardPresenter {
   #eventListComponent = new EventListView();
@@ -30,13 +30,7 @@ export default class BoardPresenter {
     this.#renderSort();
     this.#renderEventList();
 
-    if (!(this.waypoints.length > 0)) {
-      this.#renderNowayPoints();
-    } else {
-      for (let i = 0; i < this.waypoints.length; i++) {
-        this.#renderWayPoints(this.waypoints[i]);
-      }
-    }
+    this.#sortWaypoints(this.#currentSortType);
   };
 
   #renderWayPoints = (wayPoint) => {
@@ -84,7 +78,7 @@ export default class BoardPresenter {
   #sortWaypoints = (sortType) => {
     switch (sortType) {
       case SortType.DAY:
-        this.waypoints.sort(sortTaskDown);
+        this.waypoints.sort(sortWaypointDay);
         break;
       case SortType.PRICE:
         this.waypoints.sort(sortWaypointPrice);

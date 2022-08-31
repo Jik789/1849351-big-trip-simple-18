@@ -24,27 +24,8 @@ const updateItem = (items, update) => {
   ];
 };
 
-const getWeightForNullDate = (dateA, dateB) => {
-  if (dateA === null && dateB === null) {
-    return 0;
-  }
+const sortWaypointDay = (taskA, taskB) => dayjs(taskA.dateFrom).diff(dayjs(taskB.dateFrom));
 
-  if (dateA === null) {
-    return 1;
-  }
+const sortWaypointPrice = (taskA, taskB) => taskB.basePrice - taskA.basePrice;
 
-  if (dateB === null) {
-    return -1;
-  }
-
-  return null;
-};
-
-const sortTaskDown = (taskA, taskB) => {
-  return;
-};
-
-const sortWaypointPrice = (taskA, taskB) => taskA.basePrice - taskB.basePrice;
-
-
-export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortTaskDown, sortWaypointPrice};
+export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice};
