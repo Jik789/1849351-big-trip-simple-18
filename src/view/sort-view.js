@@ -42,18 +42,12 @@ export default class SortView extends AbstractView {
   };
 
   #sortTypeChangeHandler = (event) => {
-    const allSortDate = document.querySelectorAll('.trip-sort__input');
-
     if (!event.target.dataset.sortType) {
       return;
     }
 
-    for (const item of allSortDate) {
-      item.checked = false;
-    }
-
-    event.target.control.checked = true;
     event.preventDefault();
+    event.target.control.checked = true;
     this._callback.sortTypeChange(event.target.dataset.sortType);
   };
 }
