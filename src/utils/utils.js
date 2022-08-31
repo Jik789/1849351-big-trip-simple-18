@@ -24,4 +24,8 @@ const updateItem = (items, update) => {
   ];
 };
 
-export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem};
+const sortWaypointDay = (taskA, taskB) => dayjs(taskA.dateFrom).diff(dayjs(taskB.dateFrom));
+
+const sortWaypointPrice = (taskA, taskB) => taskB.basePrice - taskA.basePrice;
+
+export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice};
