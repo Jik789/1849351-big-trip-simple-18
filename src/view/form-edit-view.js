@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { humanizeDateTime } from '../utils/utils.js';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { DEFAULT_WAY_POINT } from '../mock/const-mock.js';
 
 const createFormEditTemplate = (waypoint, offers, destination, offersByType) => {
@@ -139,7 +139,7 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
 `);
 };
 
-export default class FormEditView extends AbstractView {
+export default class FormEditView extends AbstractStatefulView {
   #waypoint = null;
   #offers = null;
   #destination = null;
@@ -151,11 +151,18 @@ export default class FormEditView extends AbstractView {
     this.#offers = offers;
     this.#destination = destination;
     this.#offersByType = offersByType;
+    // this._state = {...waypoint, offers, ...destination, ...offersByType}
   }
 
   get template() {
+    console.log(this._state)
     return createFormEditTemplate(this.#waypoint, this.#offers, this.#destination, this.#offersByType);
   }
+
+  // static parseTaskToState = (task) => ({...task,
+  //   isDueDate: task.dueDate !== null,
+  //   isRepeating: isTaskRepeating(task.repeating),
+  // });
 
   setClickHandler = (callback) => {
     this._callback.click = callback;
