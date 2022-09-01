@@ -145,13 +145,13 @@ export default class FormEditView extends AbstractStatefulView {
   #destination = null;
   #offersByType = null;
 
-  constructor(waypoint = DEFAULT_WAY_POINT, offers, destination, offersByType) {
+  constructor(waypoint = DEFAULT_WAY_POINT, offersAll, destination, offersByType) {
     super();
     this.#waypoint = waypoint;
-    this.#offers = offers;
+    this.#offers = offersAll;
     this.#destination = destination;
     this.#offersByType = offersByType;
-    // this._state = {...waypoint, offers, ...destination, ...offersByType}
+    this._state = {...waypoint, offersAll, offersByType, ...destination}
   }
 
   get template() {
