@@ -1,47 +1,85 @@
-import { getRandomNumberOfRange, getRandomValue } from '../utils/utils.js';
-import { TYPE_MOCK } from './const-mock';
+import { getRandomNumberOfRange } from '../utils/utils.js';
 
-export const offerMock = (keyId) => ({
-  'id': keyId,
-  'title': getRandomValue(TYPE_MOCK),
-  'price': getRandomNumberOfRange(123, 320)
-});
-
-export const offerByTypeMock = () => ([
+export const offerMock = () => ([
   {
     'type': 'taxi',
-    'offers': ['Покушать в такси', 'Поспать в такси', 'Сходить в туалет в такси']
+    'offers': [{id: 1, title: 'taxi: Завтрак', price: getRandomNumberOfRange(100, 500)},
+      {id: 2, title: 'taxi: Обед', price: getRandomNumberOfRange(100, 500)},
+      {id: 3, title: 'taxi: Ужин', price: getRandomNumberOfRange(100, 500)},
+      {id: 4, title: 'taxi: Полотенце', price: getRandomNumberOfRange(100, 500)},
+      {id: 5, title: 'taxi: Красивую спутницу', price: getRandomNumberOfRange(100, 500)},
+      {id: 6, title: 'taxi: Чистая обувь', price: getRandomNumberOfRange(100, 500)}]
   },
   {
     'type': 'bus',
-    'offers': ['Покушать в автобусе', 'Поспать в автобусе', 'Сходить в туалет в автобусе']
+    'offers': [{id: 1, title: 'bus: Завтрак', price: getRandomNumberOfRange(100, 500)},
+      {id: 2, title: 'bus: Обед', price: getRandomNumberOfRange(100, 500)},
+      {id: 3, title: 'bus: Ужин', price: getRandomNumberOfRange(100, 500)},
+      {id: 4, title: 'bus: Полотенце', price: getRandomNumberOfRange(100, 500)},
+      {id: 5, title: 'bus: Красивую спутницу', price: getRandomNumberOfRange(100, 500)},
+      {id: 6, title: 'bus: Чистая обувь', price: getRandomNumberOfRange(100, 500)}]
   },
   {
     'type': 'train',
-    'offers': ['Покушать в поезде', 'Поспать в поезде', 'Сходить в туалет в поезде']
+    'offers': [{id: 1, title: 'train: Завтрак', price: getRandomNumberOfRange(100, 500)},
+      {id: 2, title: 'train: Обед', price: getRandomNumberOfRange(100, 500)},
+      {id: 3, title: 'train: Ужин', price: getRandomNumberOfRange(100, 500)},
+      {id: 4, title: 'train: Полотенце', price: getRandomNumberOfRange(100, 500)},
+      {id: 5, title: 'train: Красивую спутницу', price: getRandomNumberOfRange(100, 500)},
+      {id: 6, title: 'train: Чистая обувь', price: getRandomNumberOfRange(100, 500)}]
   },
   {
     'type': 'ship',
-    'offers': ['Покушать на корабле', 'Поспать на корабле', 'Сходить в туалет на корабле']
+    'offers': [{id: 1, title: 'ship: Завтрак', price: getRandomNumberOfRange(100, 500)},
+      {id: 2, title: 'ship: Обед', price: getRandomNumberOfRange(100, 500)},
+      {id: 3, title: 'ship: Ужин', price: getRandomNumberOfRange(100, 500)},
+      {id: 4, title: 'ship: Полотенце', price: getRandomNumberOfRange(100, 500)},
+      {id: 5, title: 'ship: Красивую спутницу', price: getRandomNumberOfRange(100, 500)},
+      {id: 6, title: 'ship: Чистая обувь', price: getRandomNumberOfRange(100, 500)}]
   },
   {
     'type': 'drive',
-    'offers': ['Покушать в поездке', 'Поспать в поездке', 'Сходить в туалет в поездке']
+    'offers': [{id: 1, title: 'drive: Завтрак', price: getRandomNumberOfRange(100, 500)},
+      {id: 2, title: 'drive: Обед', price: getRandomNumberOfRange(100, 500)},
+      {id: 3, title: 'drive: Ужин', price: getRandomNumberOfRange(100, 500)},
+      {id: 4, title: 'drive: Полотенце', price: getRandomNumberOfRange(100, 500)},
+      {id: 5, title: 'drive: Красивую спутницу', price: getRandomNumberOfRange(100, 500)},
+      {id: 6, title: 'drive: Чистая обувь', price: getRandomNumberOfRange(100, 500)}]
   },
   {
     'type': 'flight',
-    'offers': ['Покушать в полете', 'Поспать в полете', 'Сходить в туалет в полете']
+    'offers': [{id: 1, title: 'flight: Завтрак', price: getRandomNumberOfRange(100, 500)},
+      {id: 2, title: 'flight: Обед', price: getRandomNumberOfRange(100, 500)},
+      {id: 3, title: 'flight: Ужин', price: getRandomNumberOfRange(100, 500)},
+      {id: 4, title: 'flight: Полотенце', price: getRandomNumberOfRange(100, 500)},
+      {id: 5, title: 'flight: Красивую спутницу', price: getRandomNumberOfRange(100, 500)},
+      {id: 6, title: 'flight: Чистая обувь', price: getRandomNumberOfRange(100, 500)}]
   },
   {
     'type': 'check-in',
-    'offers': ['Покушать при чек-ине', 'Поспать при чек-ине', 'Сходить в туалет при чек-ине']
+    'offers': [{id: 1, title: 'check-in: Завтрак', price: getRandomNumberOfRange(100, 500)},
+      {id: 2, title: 'check-in: Обед', price: getRandomNumberOfRange(100, 500)},
+      {id: 3, title: 'check-in: Ужин', price: getRandomNumberOfRange(100, 500)},
+      {id: 4, title: 'check-in: Полотенце', price: getRandomNumberOfRange(100, 500)},
+      {id: 5, title: 'check-in: Красивую спутницу', price: getRandomNumberOfRange(100, 500)},
+      {id: 6, title: 'check-in: Чистая обувь', price: getRandomNumberOfRange(100, 500)}]
   },
   {
     'type': 'sightseeing',
-    'offers': ['Покушать при осмотре', 'Поспать при осмотре', 'Сходить в туалет при осмотре']
+    'offers': [{id: 1, title: 'sightseeing: Завтрак', price: getRandomNumberOfRange(100, 500)},
+      {id: 2, title: 'sightseeing: Обед', price: getRandomNumberOfRange(100, 500)},
+      {id: 3, title: 'sightseeing: Ужин', price: getRandomNumberOfRange(100, 500)},
+      {id: 4, title: 'sightseeing: Полотенце', price: getRandomNumberOfRange(100, 500)},
+      {id: 5, title: 'sightseeing: Красивую спутницу', price: getRandomNumberOfRange(100, 500)},
+      {id: 6, title: 'sightseeing: Чистая обувь', price: getRandomNumberOfRange(100, 500)}]
   },
   {
     'type': 'restaurant',
-    'offers': ['Покушать в ресторане', 'Поспать в ресторане', 'Сходить в туалет в ресторане']
+    'offers': [{id: 1, title: 'restaurant: Завтрак', price: getRandomNumberOfRange(100, 500)},
+      {id: 2, title: 'restaurant: Обед', price: getRandomNumberOfRange(100, 500)},
+      {id: 3, title: 'restaurant: Ужин', price: getRandomNumberOfRange(100, 500)},
+      {id: 4, title: 'restaurant: Полотенце', price: getRandomNumberOfRange(100, 500)},
+      {id: 5, title: 'restaurant: Красивую спутницу', price: getRandomNumberOfRange(100, 500)},
+      {id: 6, title: 'restaurant: Чистая обувь', price: getRandomNumberOfRange(100, 500)}]
   },
 ]);

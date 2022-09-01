@@ -2,7 +2,8 @@
 
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import { DEFAULT_WAY_POINT } from '../mock/const-mock.js';
+import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
+import { toUpperCaseFirstLetter } from '../utils/utils';
 
 const createFormEditTemplate = (waypoint, offers, destination, offersByType) => {
   const dateFrom = waypoint.dateFrom;
@@ -11,17 +12,27 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
   const dateTimeToReadble = humanizeDateTime(dateTo);
 
-  const createOffersByTypeTemplate = (allOffers) =>
-    (`${allOffers.map((offer, offerIndex) =>
-      `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" type="checkbox" name="event-offer-luggage" checked="">
+  const createEventTypeListTemplate = () => (WAYPOINT_TYPE_MOCK.map((wayPointType) => {
+    const checked = waypoint.type === wayPointType ? 'checked' : '';
+    return `<div class="event__type-item">
+      <input id="event-type-${wayPointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${wayPointType}" ${checked}>
+      <label class="event__type-label  event__type-label--${wayPointType}" for="event-type-${wayPointType}-1">${toUpperCaseFirstLetter(wayPointType)}</label>
+    </div>`;
+  }
+  ).join(''));
+
+  const createOffersByTypeTemplate = (allOffers) => (allOffers.map((offer, offerIndex) => {
+    const checked = waypoint.offers.includes(offer.id) ? 'checked' : '';
+    return `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" type="checkbox" name="event-offer-luggage" ${checked}>
       <label class="event__offer-label" for="event-offer-${offerIndex}">
-        <span class="event__offer-title">${offer}</span>
+        <span class="event__offer-title">${offer.title}</span>
         +€&nbsp;
         <span class="event__offer-price">50</span>
       </label>
-    </div>`).join('')}`
-    );
+    </div>`;
+  }
+  ).join(''));
 
   return (`
 <li class="trip-events__item">
@@ -37,51 +48,7 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
     <div class="event__type-list">
       <fieldset class="event__type-group">
         <legend class="visually-hidden">Event type</legend>
-
-        <div class="event__type-item">
-          <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-          <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-        </div>
-
-        <div class="event__type-item">
-          <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-          <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-        </div>
-
-        <div class="event__type-item">
-          <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-          <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-        </div>
-
-        <div class="event__type-item">
-          <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-          <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-        </div>
-
-        <div class="event__type-item">
-          <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-          <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-        </div>
-
-        <div class="event__type-item">
-          <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked="">
-          <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-        </div>
-
-        <div class="event__type-item">
-          <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-          <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-        </div>
-
-        <div class="event__type-item">
-          <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-          <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-        </div>
-
-        <div class="event__type-item">
-          <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-          <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-        </div>
+        ${createEventTypeListTemplate()}
       </fieldset>
     </div>
   </div>
@@ -125,7 +92,7 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
     <div class="event__available-offers">
-      ${createOffersByTypeTemplate(offersByType.offers)}
+      ${createOffersByTypeTemplate(offersByType)}
     </div>
   </section>
 
@@ -151,18 +118,12 @@ export default class FormEditView extends AbstractStatefulView {
     this.#offers = offersAll;
     this.#destination = destination;
     this.#offersByType = offersByType;
-    this._state = {...waypoint, offersAll, offersByType, ...destination}
+    this._state = {...waypoint, offersAll, offersByType, ...destination};
   }
 
   get template() {
-    console.log(this._state)
     return createFormEditTemplate(this.#waypoint, this.#offers, this.#destination, this.#offersByType);
   }
-
-  // static parseTaskToState = (task) => ({...task,
-  //   isDueDate: task.dueDate !== null,
-  //   isRepeating: isTaskRepeating(task.repeating),
-  // });
 
   setClickHandler = (callback) => {
     this._callback.click = callback;

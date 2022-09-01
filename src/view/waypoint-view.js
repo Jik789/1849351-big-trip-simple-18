@@ -18,12 +18,12 @@ const createWaypointTemplate = (waypoint, offers, destination) => {
   const robotDateTimeTo = robotDateTime(dateTo);
 
   const createOffersWaypointTemplate = (allOffers) =>
-    (`${allOffers.map((offer) =>
-      `<li class="event__offer"> 
+    (allOffers.map((offer) =>
+      `<li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
-      </li>`).join('')}`
+      </li>`).join('')
     );
 
   return (`
