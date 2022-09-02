@@ -13,6 +13,10 @@ export default class WaypointModel {
     return this.#wayPoints;
   }
 
+  get allDestinations() {
+    return this.#allDestinations;
+  }
+
   getWaypointDestinations = (wayPoint) => this.#allDestinations.find((destination) => wayPoint.destination === destination.id);
 
   getWaypointOffers = (wayPoint) => this.getWaypointOffersByType(wayPoint).filter((offer) => wayPoint.offers.includes(offer.id));

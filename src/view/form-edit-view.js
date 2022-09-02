@@ -5,7 +5,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
 import { toUpperCaseFirstLetter } from '../utils/utils';
 
-const createFormEditTemplate = (waypoint, offers, destination, offersByType) => {
+const createFormEditTemplate = (waypoint, offers, destination, offersByType, allDestination) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
 
@@ -21,18 +21,51 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
   }
   ).join(''));
 
-  const createOffersByTypeTemplate = (allOffers) => (allOffers.map((offer, offerIndex) => {
+  const createOffersByTypeTemplate = () => (offersByType.map((offer, offerIndex) => {
     const checked = waypoint.offers.includes(offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" type="checkbox" name="event-offer-luggage" ${checked}>
       <label class="event__offer-label" for="event-offer-${offerIndex}">
         <span class="event__offer-title">${offer.title}</span>
         +€&nbsp;
-        <span class="event__offer-price">50</span>
+        <span class="event__offer-price">${offer.price}</span>
       </label>
     </div>`;
   }
   ).join(''));
+
+  const createDestinationOptionsTemplate = () => (allDestination.map((destinationItem) => (
+    `<option value="${destinationItem.name}"></option>`
+  )).join(''));
+
+  const createPhotosTemplate = (pictures) => (pictures.map((picture) => (
+    `<img class="event__photo" src="${picture.src}" alt="Event photo">`
+  )).join(''));
+
+  const createPhotosContainerTemplate = () => {
+    if ('pictures' in destination) {
+      return `<div class="event__photos-container">
+      <div class="event__photos-tape">
+       ${createPhotosTemplate(destination.pictures)}
+      </div>
+    </div>`;
+    } else {
+      return '';
+    }
+  };
+
+
+  const createDestinationsContainerTemplate = () => {
+    if (destination !== null) {
+      return `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${destination.description}</p>
+      ${createPhotosContainerTemplate()}
+    </section>`;
+    } else {
+      return '';
+    }
+  };
 
   return (`
 <li class="trip-events__item">
@@ -59,9 +92,7 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
     </label>
     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
     <datalist id="destination-list-1">
-      <option value="Amsterdam"></option>
-      <option value="Geneva"></option>
-      <option value="Chamonix"></option>
+      ${createDestinationOptionsTemplate()}
     </datalist>
   </div>
 
@@ -92,14 +123,10 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType) => 
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
     <div class="event__available-offers">
-      ${createOffersByTypeTemplate(offersByType)}
+      ${createOffersByTypeTemplate()}
     </div>
   </section>
-
-  <section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.description}</p>
-  </section>
+  ${createDestinationsContainerTemplate()}
 </section>
 </form>
 </li>
@@ -111,18 +138,20 @@ export default class FormEditView extends AbstractStatefulView {
   #offers = null;
   #destination = null;
   #offersByType = null;
+  #allDestination = null;
 
-  constructor(waypoint = DEFAULT_WAY_POINT, offersAll, destination, offersByType) {
+  constructor(waypoint = DEFAULT_WAY_POINT, offersAll, destination, offersByType, allDestination) {
     super();
     this.#waypoint = waypoint;
     this.#offers = offersAll;
     this.#destination = destination;
     this.#offersByType = offersByType;
+    this.#allDestination = allDestination;
     this._state = {...waypoint, offersAll, offersByType, ...destination};
   }
 
   get template() {
-    return createFormEditTemplate(this.#waypoint, this.#offers, this.#destination, this.#offersByType);
+    return createFormEditTemplate(this.#waypoint, this.#offers, this.#destination, this.#offersByType, this.#allDestination);
   }
 
   setClickHandler = (callback) => {

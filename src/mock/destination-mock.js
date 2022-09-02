@@ -9,6 +9,14 @@ export const destinationMock = (keyId) => ({
     {
       'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
+    },
+    {
+      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
+    },
+    {
+      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     }
   ]
 });

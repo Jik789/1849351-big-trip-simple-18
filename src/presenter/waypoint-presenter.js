@@ -43,7 +43,8 @@ export default class WaypointPresenter {
       waypoint,
       this.waypointsModel.getWaypointOffers(waypoint),
       this.waypointsModel.getWaypointDestinations(waypoint),
-      this.waypointsModel.getWaypointOffersByType(waypoint)
+      this.waypointsModel.getWaypointOffersByType(waypoint),
+      this.waypointsModel.allDestinations
     );
 
     this.#waypointComponent.setClickHandler(this.#setClickCardToForm);
