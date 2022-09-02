@@ -7,6 +7,6 @@ export const waypointMock = (keyId) => ({
   'dateTo': getRandomValue(DATE_TO_MOCK),
   'destination': keyId,
   'id': keyId,
-  'offers': Array.from(new Set([getRandomNumberOfRange(1, 4), getRandomNumberOfRange(1, 4), getRandomNumberOfRange(1, 4), getRandomNumberOfRange(1, 4)])), //Во тут будет приходить статичное значение, по этому не должно быть проблем
+  'offers': Array.from(new Set([getRandomNumberOfRange(1, 4), getRandomNumberOfRange(1, 4), getRandomNumberOfRange(1, 4), getRandomNumberOfRange(1, 4)])),
   'type': getRandomValue(WAYPOINT_TYPE_MOCK),
 });
