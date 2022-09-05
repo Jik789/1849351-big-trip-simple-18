@@ -3,11 +3,14 @@
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
-import { toUpperCaseFirstLetter } from '../utils/utils';
+import { toUpperCaseFirstLetter, isWaypontRepeating } from '../utils/utils';
 
-const createFormEditTemplate = (waypoint, offers, destination, offersByType, allDestination) => {
+const createFormEditTemplate = (waypoint) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
+  const allDestination = waypoint.allDestination;
+  const allOffersByType = waypoint.allOffersByType;
+  const destination = waypoint.destination;
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
   const dateTimeToReadble = humanizeDateTime(dateTo);
@@ -21,7 +24,7 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType, all
   }
   ).join(''));
 
-  const createOffersByTypeTemplate = () => (offersByType.map((offer, offerIndex) => {
+  const createOffersByTypeTemplate = () => (allOffersByType.map((offer, offerIndex) => {
     const checked = waypoint.offers.includes(offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" type="checkbox" name="event-offer-luggage" ${checked}>
@@ -43,10 +46,10 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType, all
   )).join(''));
 
   const createPhotosContainerTemplate = () => {
-    if ('pictures' in destination) {
+    if ('pictures' in waypoint) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
-       ${createPhotosTemplate(destination.pictures)}
+       ${createPhotosTemplate(waypoint.pictures)}
       </div>
     </div>`;
     } else {
@@ -59,7 +62,7 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType, all
     if (destination !== null) {
       return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${destination.description}</p>
+      <p class="event__destination-description">${waypoint.description}</p>
       ${createPhotosContainerTemplate()}
     </section>`;
     } else {
@@ -90,7 +93,7 @@ const createFormEditTemplate = (waypoint, offers, destination, offersByType, all
     <label class="event__label  event__type-output" for="event-destination-1">
       ${waypoint.type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${waypoint.name}" list="destination-list-1">
     <datalist id="destination-list-1">
       ${createDestinationOptionsTemplate()}
     </datalist>
@@ -137,22 +140,27 @@ export default class FormEditView extends AbstractStatefulView {
   #waypoint = null;
   #offers = null;
   #destination = null;
-  #offersByType = null;
+  #allOffersByType = null;
   #allDestination = null;
 
-  constructor(waypoint = DEFAULT_WAY_POINT, offersAll, destination, offersByType, allDestination) {
+  constructor(waypoint = DEFAULT_WAY_POINT, offersAll, destination, allOffersByType, allDestination) {
     super();
     this.#waypoint = waypoint;
     this.#offers = offersAll;
     this.#destination = destination;
-    this.#offersByType = offersByType;
+    this.#allOffersByType = allOffersByType;
     this.#allDestination = allDestination;
-    this._state = {...waypoint, offersAll, offersByType, ...destination};
+    this._state1 = {...waypoint, ...destination, allOffersByType, allDestination};
+    this._state = FormEditView.parseWaypointToState({...waypoint, ...destination, allOffersByType, allDestination});
   }
 
   get template() {
-    return createFormEditTemplate(this.#waypoint, this.#offers, this.#destination, this.#offersByType, this.#allDestination);
+    // console.log(this._state) // Вот так стало
+    // console.log(this.#waypoint, this.#destination, this.#allOffersByType, this.#allDestination) // Вот так было
+    return createFormEditTemplate(this._state1);
   }
+
+  static parseWaypointToState = (waypoint) => ({...waypoint});
 
   setClickHandler = (callback) => {
     this._callback.click = callback;
