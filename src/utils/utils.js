@@ -14,6 +14,16 @@ const toUpperCaseFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
 const isWaypontRepeating = (repeating) => Object.values(repeating).some(Boolean);
 
+const getObjectIndexInArray = (arr) => {
+  const arrIndex = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    arrIndex.push(arr[i].id);
+  }
+
+  return arrIndex;
+};
+
 const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
 
@@ -32,4 +42,4 @@ const sortWaypointDay = (taskA, taskB) => dayjs(taskA.dateFrom).diff(dayjs(taskB
 
 const sortWaypointPrice = (taskA, taskB) => taskB.basePrice - taskA.basePrice;
 
-export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, isWaypontRepeating};
+export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, isWaypontRepeating, getObjectIndexInArray};

@@ -3,13 +3,12 @@
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
-import { toUpperCaseFirstLetter, isWaypontRepeating } from '../utils/utils';
+import { toUpperCaseFirstLetter, isWaypontRepeating, getObjectIndexInArray } from '../utils/utils';
 
-const createFormEditTemplate = (waypoint) => {
+const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
-  const allDestination = waypoint.allDestination;
-  const allOffersByType = waypoint.allOffersByType;
+  console.log(waypoint, allDestination, allOffersByType);
   const destination = waypoint.destination;
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
@@ -143,24 +142,37 @@ export default class FormEditView extends AbstractStatefulView {
   #allOffersByType = null;
   #allDestination = null;
 
-  constructor(waypoint = DEFAULT_WAY_POINT, offersAll, destination, allOffersByType, allDestination) {
+  constructor(waypoint = DEFAULT_WAY_POINT, offers, destination, allOffersByType, allDestination) {
     super();
     this.#waypoint = waypoint;
-    this.#offers = offersAll;
+    this.#offers = offers;
     this.#destination = destination;
     this.#allOffersByType = allOffersByType;
     this.#allDestination = allDestination;
-    this._state1 = {...waypoint, ...destination, allOffersByType, allDestination};
-    this._state = FormEditView.parseWaypointToState({...waypoint, ...destination, allOffersByType, allDestination});
+    this._state = FormEditView.parseWaypointToState(waypoint, destination, offers);
   }
 
   get template() {
-    // console.log(this._state) // Вот так стало
-    // console.log(this.#waypoint, this.#destination, this.#allOffersByType, this.#allDestination) // Вот так было
-    return createFormEditTemplate(this._state1);
+    return createFormEditTemplate(this._state, this.#allDestination, this.#allOffersByType);
   }
 
-  static parseWaypointToState = (waypoint) => ({...waypoint});
+  static parseWaypointToState = (waypoint, destination, offers) => {
+    const state = {
+      ...waypoint,
+      destination,
+      offers
+    };
+    return state;
+  };
+
+  static parseStateToWaypoint = (state, destination, offers) => {
+    const waypoint = {
+      ...state,
+      destination: destination.id,
+      offers: getObjectIndexInArray(offers)
+    }
+    return waypoint
+  };
 
   setClickHandler = (callback) => {
     this._callback.click = callback;
