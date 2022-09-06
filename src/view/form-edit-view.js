@@ -143,6 +143,7 @@ export default class FormEditView extends AbstractStatefulView {
     this.#allOffersByType = allOffersByType;
     this.#allDestination = allDestination;
     this._state = FormEditView.parseWaypointToState(waypoint, destination, offers);
+    this.#setInnerHandlers();
   }
 
   get template() {
@@ -165,6 +166,26 @@ export default class FormEditView extends AbstractStatefulView {
       offers: getObjectIndexInArray(state.offers)
     };
     return waypoint;
+  };
+
+  #setInnerHandlers = () => {
+    Array.from(this.element.querySelectorAll('.event__type-input')).forEach((typeElement) => typeElement
+      .addEventListener('click', this.#eventTypeToggleHandler)
+    );
+  };
+
+  #eventTypeToggleHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      type: evt.target.value,
+      offers: [],
+    });
+  };
+
+  _restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setSubmitHandler(this._callback.submit);
+    this.setClickHandler(this._callback.click);
   };
 
   setClickHandler = (callback) => {
