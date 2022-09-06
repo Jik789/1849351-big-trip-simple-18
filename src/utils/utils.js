@@ -12,8 +12,6 @@ const getRandomValue = (items) => items[getRandomNumberOfRange(0, items.length -
 
 const toUpperCaseFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
-const isWaypontRepeating = (repeating) => Object.values(repeating).some(Boolean);
-
 const getObjectIndexInArray = (arr) => {
   const arrIndex = [];
 
@@ -42,4 +40,4 @@ const sortWaypointDay = (taskA, taskB) => dayjs(taskA.dateFrom).diff(dayjs(taskB
 
 const sortWaypointPrice = (taskA, taskB) => taskB.basePrice - taskA.basePrice;
 
-export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, isWaypontRepeating, getObjectIndexInArray};
+export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, getObjectIndexInArray};

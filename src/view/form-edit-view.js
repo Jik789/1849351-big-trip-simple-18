@@ -3,12 +3,11 @@
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
-import { toUpperCaseFirstLetter, isWaypontRepeating, getObjectIndexInArray } from '../utils/utils';
+import { toUpperCaseFirstLetter, getObjectIndexInArray } from '../utils/utils';
 
 const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
-  console.log(waypoint, allDestination, allOffersByType);
   const destination = waypoint.destination;
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
@@ -24,7 +23,8 @@ const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
   ).join(''));
 
   const createOffersByTypeTemplate = () => (allOffersByType.map((offer, offerIndex) => {
-    const checked = waypoint.offers.includes(offer.id) ? 'checked' : '';
+    const waypointOffers = getObjectIndexInArray(waypoint.offers);
+    const checked = waypointOffers.includes(offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" type="checkbox" name="event-offer-luggage" ${checked}>
       <label class="event__offer-label" for="event-offer-${offerIndex}">
@@ -56,12 +56,11 @@ const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
     }
   };
 
-
   const createDestinationsContainerTemplate = () => {
     if (destination !== null) {
       return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${waypoint.description}</p>
+      <p class="event__destination-description">${waypoint.destination.description}</p>
       ${createPhotosContainerTemplate()}
     </section>`;
     } else {
@@ -92,7 +91,7 @@ const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
     <label class="event__label  event__type-output" for="event-destination-1">
       ${waypoint.type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${waypoint.name}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${waypoint.destination.name}" list="destination-list-1">
     <datalist id="destination-list-1">
       ${createDestinationOptionsTemplate()}
     </datalist>
@@ -136,17 +135,11 @@ const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
 };
 
 export default class FormEditView extends AbstractStatefulView {
-  #waypoint = null;
-  #offers = null;
-  #destination = null;
   #allOffersByType = null;
   #allDestination = null;
 
   constructor(waypoint = DEFAULT_WAY_POINT, offers, destination, allOffersByType, allDestination) {
     super();
-    this.#waypoint = waypoint;
-    this.#offers = offers;
-    this.#destination = destination;
     this.#allOffersByType = allOffersByType;
     this.#allDestination = allDestination;
     this._state = FormEditView.parseWaypointToState(waypoint, destination, offers);
@@ -165,13 +158,13 @@ export default class FormEditView extends AbstractStatefulView {
     return state;
   };
 
-  static parseStateToWaypoint = (state, destination, offers) => {
+  static parseStateToWaypoint = (state) => {
     const waypoint = {
       ...state,
-      destination: destination.id,
-      offers: getObjectIndexInArray(offers)
-    }
-    return waypoint
+      destination: state.destination.id,
+      offers: getObjectIndexInArray(state.offers)
+    };
+    return waypoint;
   };
 
   setClickHandler = (callback) => {
@@ -191,6 +184,6 @@ export default class FormEditView extends AbstractStatefulView {
 
   #submitHandler = (event) => {
     event.preventDefault();
-    this._callback.submit();
+    this._callback.submit(FormEditView.parseStateToWaypoint(this._state));
   };
 }
