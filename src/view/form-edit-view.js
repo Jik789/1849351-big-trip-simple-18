@@ -5,10 +5,9 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
 import { toUpperCaseFirstLetter, getObjectIndexInArray } from '../utils/utils';
 
-const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
+const createFormEditTemplate = (waypoint, offers, destination, allDestination, allOffersByType) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
-  const destination = waypoint.destination;
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
   const dateTimeToReadble = humanizeDateTime(dateTo);
@@ -23,7 +22,7 @@ const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
   ).join(''));
 
   const createOffersByTypeTemplate = () => (allOffersByType.map((offer, offerIndex) => {
-    const waypointOffers = getObjectIndexInArray(waypoint.offers);
+    const waypointOffers = getObjectIndexInArray(offers);
     const checked = waypointOffers.includes(offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" type="checkbox" name="event-offer-luggage" ${checked}>
@@ -45,10 +44,11 @@ const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
   )).join(''));
 
   const createPhotosContainerTemplate = () => {
-    if ('pictures' in waypoint) {
+    return '';
+    if ('pictures' in destination) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
-       ${createPhotosTemplate(waypoint.pictures)}
+       ${createPhotosTemplate(destination.pictures)}
       </div>
     </div>`;
     } else {
@@ -60,7 +60,7 @@ const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
     if (destination !== null) {
       return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${waypoint.destination.description}</p>
+      <p class="event__destination-description">${destination.description}</p>
       ${createPhotosContainerTemplate()}
     </section>`;
     } else {
@@ -91,7 +91,7 @@ const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
     <label class="event__label  event__type-output" for="event-destination-1">
       ${waypoint.type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${waypoint.destination.name}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
     <datalist id="destination-list-1">
       ${createDestinationOptionsTemplate()}
     </datalist>
@@ -135,51 +135,35 @@ const createFormEditTemplate = (waypoint, allDestination, allOffersByType) => {
 };
 
 export default class FormEditView extends AbstractStatefulView {
+  #offers = null;
+  #destination = null;
   #allOffersByType = null;
   #allDestination = null;
 
   constructor(waypoint = DEFAULT_WAY_POINT, offers, destination, allOffersByType, allDestination) {
     super();
+    this.#offers = offers;
+    this.#destination = destination;
     this.#allOffersByType = allOffersByType;
     this.#allDestination = allDestination;
-    this._state = FormEditView.parseWaypointToState(waypoint, destination, offers);
-    this.#setInnerHandlers();
+    this._state = FormEditView.parseWaypointToState(waypoint);
+    // this.#setInnerHandlers();
   }
 
   get template() {
-    return createFormEditTemplate(this._state, this.#allDestination, this.#allOffersByType);
+    return createFormEditTemplate(this._state, this.#offers, this.#destination, this.#allDestination, this.#allOffersByType);
   }
 
-  static parseWaypointToState = (waypoint, destination, offers) => {
-    const state = {
-      ...waypoint,
-      destination,
-      offers
-    };
-    return state;
-  };
+  static parseWaypointToState = (waypoint) => ({
+    ...waypoint
+  });
 
-  static parseStateToWaypoint = (state) => {
-    const waypoint = {
-      ...state,
-      destination: state.destination.id,
-      offers: getObjectIndexInArray(state.offers)
-    };
-    return waypoint;
-  };
+  static parseStateToWaypoint = (state) => ({
+    ...state
+  });
 
   #setInnerHandlers = () => {
-    Array.from(this.element.querySelectorAll('.event__type-input')).forEach((typeElement) => typeElement
-      .addEventListener('click', this.#eventTypeToggleHandler)
-    );
-  };
 
-  #eventTypeToggleHandler = (evt) => {
-    evt.preventDefault();
-    this.updateElement({
-      type: evt.target.value,
-      offers: [],
-    });
   };
 
   _restoreHandlers = () => {
@@ -205,6 +189,9 @@ export default class FormEditView extends AbstractStatefulView {
 
   #submitHandler = (event) => {
     event.preventDefault();
+    this.updateElement({
+      basePrice: 8888,
+    });
     this._callback.submit(FormEditView.parseStateToWaypoint(this._state));
   };
 }
