@@ -44,7 +44,6 @@ const createFormEditTemplate = (waypoint, offers, destination, allDestination, a
   )).join(''));
 
   const createPhotosContainerTemplate = () => {
-    return '';
     if ('pictures' in destination) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
@@ -147,7 +146,7 @@ export default class FormEditView extends AbstractStatefulView {
     this.#allOffersByType = allOffersByType;
     this.#allDestination = allDestination;
     this._state = FormEditView.parseWaypointToState(waypoint);
-    // this.#setInnerHandlers();
+    this.#setInnerHandlers();
   }
 
   get template() {
@@ -163,7 +162,24 @@ export default class FormEditView extends AbstractStatefulView {
   });
 
   #setInnerHandlers = () => {
+    Array.from(this.element.querySelectorAll('.event__type-input')).forEach((typeElement) => typeElement
+      .addEventListener('click', this.#eventTypeHandler));
+    // this.element.querySelector('.event__input--destination').addEventListener('submit', this.#eventDestinationHandler);
+  };
 
+  #eventDestinationHandler = (event) => {
+    const destinationId = this.#allDestination.find((destination) => destination.name === event.target.value);
+    this.updateElement({
+      destination: destinationId,
+    });
+  };
+
+  #eventTypeHandler = (event) => {
+    event.preventDefault();
+    this.updateElement({
+      type: event.target.value,
+      offers: [],
+    });
   };
 
   _restoreHandlers = () => {
@@ -189,9 +205,6 @@ export default class FormEditView extends AbstractStatefulView {
 
   #submitHandler = (event) => {
     event.preventDefault();
-    this.updateElement({
-      basePrice: 8888,
-    });
     this._callback.submit(FormEditView.parseStateToWaypoint(this._state));
   };
 }

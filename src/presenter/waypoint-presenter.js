@@ -112,8 +112,9 @@ export default class WaypointPresenter {
     document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 
-  #setSubmitHandler = () => {
+  #setSubmitHandler = (waypoint) => {
     this.#replaceFormToCard();
+    this.#changeData(waypoint);
     document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 }

@@ -6,7 +6,7 @@ import { waypointMock } from '../mock/waypoint-mock';
 
 export default class WaypointModel {
   #wayPoints = Array.from({length: WAYPOINT_COUNT}, (_value, index) => waypointMock(index + 1));
-  #allDestinations = Array.from({length: WAYPOINT_COUNT}, (_value, index) => destinationMock(index + 1));
+  #allDestinations = destinationMock();
   #allOffers = offerMock();
 
   get waypoints() {
@@ -15,6 +15,10 @@ export default class WaypointModel {
 
   get allDestinations() {
     return this.#allDestinations;
+  }
+
+  get allOffers() {
+    return this.#allOffers;
   }
 
   getWaypointDestinations = (wayPoint) => this.#allDestinations.find((destination) => wayPoint.destination === destination.id);

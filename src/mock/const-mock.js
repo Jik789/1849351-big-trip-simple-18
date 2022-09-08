@@ -1,10 +1,10 @@
-const WAYPOINT_COUNT = 2;
+const WAYPOINT_COUNT = 2; // БОЛЬШЕ 8 НЕЗЯ
 
 const BASE_PRICE_MOCK = [500, 600, 700, 800, 900, 1000];
 const DATE_FROM_MOCK = ['2023-06-10T12:25:56.845Z', '2023-06-13T10:53:56.845Z', '2023-06-15T07:37:56.845Z', '2023-06-22T18:44:56.845Z'];
 const DATE_TO_MOCK = ['2021-07-12T11:58:56.845Z', '2023-07-16T16:34:56.845Z', '2023-07-18T12:27:56.845Z', '2023-07-25T13:23:56.845Z'];
 const WAYPOINT_TYPE_MOCK = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-const NAME_MOCK = ['Москва', 'Париж', 'Нью-Йорк', 'Пекин', 'Киев', 'Будапешт'];
+const NAME_MOCK = ['Москва', 'Париж', 'Пекин', 'Киев', 'Будапешт'];
 
 const DEFAULT_WAY_POINT = {
   id: 0,
