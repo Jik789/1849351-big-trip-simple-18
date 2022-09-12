@@ -3,11 +3,14 @@
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
-import { toUpperCaseFirstLetter, getObjectIndexInArray } from '../utils/utils';
+import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
 
-const createFormEditTemplate = (waypoint, offers, destination, allDestination, allOffersByType) => {
+const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
+
+  const foundDestination = getDestination(waypoint.destination, allDestinations);
+  const offersByType = getOffersByType(waypoint.type, allOffers);
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
   const dateTimeToReadble = humanizeDateTime(dateTo);
@@ -21,9 +24,8 @@ const createFormEditTemplate = (waypoint, offers, destination, allDestination, a
   }
   ).join(''));
 
-  const createOffersByTypeTemplate = () => (allOffersByType.map((offer, offerIndex) => {
-    const waypointOffers = getObjectIndexInArray(offers);
-    const checked = waypointOffers.includes(offer.id) ? 'checked' : '';
+  const createOffersByTypeTemplate = () => (offersByType.map((offer, offerIndex) => {
+    const checked = waypoint.offers.includes(offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" type="checkbox" name="event-offer-luggage" ${checked}>
       <label class="event__offer-label" for="event-offer-${offerIndex}">
@@ -35,7 +37,7 @@ const createFormEditTemplate = (waypoint, offers, destination, allDestination, a
   }
   ).join(''));
 
-  const createDestinationOptionsTemplate = () => (allDestination.map((destinationItem) => (
+  const createDestinationOptionsTemplate = () => (allDestinations.map((destinationItem) => (
     `<option value="${destinationItem.name}"></option>`
   )).join(''));
 
@@ -44,10 +46,10 @@ const createFormEditTemplate = (waypoint, offers, destination, allDestination, a
   )).join(''));
 
   const createPhotosContainerTemplate = () => {
-    if ('pictures' in destination) {
+    if ('pictures' in foundDestination) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
-       ${createPhotosTemplate(destination.pictures)}
+       ${createPhotosTemplate(foundDestination.pictures)}
       </div>
     </div>`;
     } else {
@@ -55,17 +57,11 @@ const createFormEditTemplate = (waypoint, offers, destination, allDestination, a
     }
   };
 
-  const createDestinationsContainerTemplate = () => {
-    if (destination !== null) {
-      return `<section class="event__section  event__section--destination">
+  const createDestinationsContainerTemplate = () => `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${destination.description}</p>
+      <p class="event__destination-description">${foundDestination.description}</p>
       ${createPhotosContainerTemplate()}
     </section>`;
-    } else {
-      return '';
-    }
-  };
 
   return (`
 <li class="trip-events__item">
@@ -90,7 +86,7 @@ const createFormEditTemplate = (waypoint, offers, destination, allDestination, a
     <label class="event__label  event__type-output" for="event-destination-1">
       ${waypoint.type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${foundDestination.name}" list="destination-list-1">
     <datalist id="destination-list-1">
       ${createDestinationOptionsTemplate()}
     </datalist>
@@ -134,23 +130,19 @@ const createFormEditTemplate = (waypoint, offers, destination, allDestination, a
 };
 
 export default class FormEditView extends AbstractStatefulView {
-  #offers = null;
-  #destination = null;
-  #allOffersByType = null;
-  #allDestination = null;
+  #allOffers = null;
+  #allDestinations = null;
 
-  constructor(waypoint = DEFAULT_WAY_POINT, offers, destination, allOffersByType, allDestination) {
+  constructor(waypoint = DEFAULT_WAY_POINT, allDestinations = [], allOffers = []) {
     super();
-    this.#offers = offers;
-    this.#destination = destination;
-    this.#allOffersByType = allOffersByType;
-    this.#allDestination = allDestination;
+    this.#allDestinations = allDestinations;
+    this.#allOffers = allOffers;
     this._state = FormEditView.parseWaypointToState(waypoint);
     this.#setInnerHandlers();
   }
 
   get template() {
-    return createFormEditTemplate(this._state, this.#offers, this.#destination, this.#allDestination, this.#allOffersByType);
+    return createFormEditTemplate(this._state, this.#allDestinations, this.#allOffers);
   }
 
   static parseWaypointToState = (waypoint) => ({
@@ -167,12 +159,12 @@ export default class FormEditView extends AbstractStatefulView {
     // this.element.querySelector('.event__input--destination').addEventListener('submit', this.#eventDestinationHandler);
   };
 
-  #eventDestinationHandler = (event) => {
-    const destinationId = this.#allDestination.find((destination) => destination.name === event.target.value);
-    this.updateElement({
-      destination: destinationId,
-    });
-  };
+  // #eventDestinationHandler = (event) => {
+  //   const destinationId = this.#allDestination.find((destination) => destination.name === event.target.value);
+  //   this.updateElement({
+  //     destination: destinationId,
+  //   });
+  // };
 
   #eventTypeHandler = (event) => {
     event.preventDefault();

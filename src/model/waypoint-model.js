@@ -3,6 +3,7 @@ import { WAYPOINT_COUNT } from '../mock/const-mock';
 import { destinationMock } from '../mock/destination-mock';
 import { offerMock } from '../mock/offer-mock';
 import { waypointMock } from '../mock/waypoint-mock';
+import { getDestination, getOffersByType } from '../utils/utils';
 
 export default class WaypointModel {
   #wayPoints = Array.from({length: WAYPOINT_COUNT}, (_value, index) => waypointMock(index + 1));
@@ -21,9 +22,6 @@ export default class WaypointModel {
     return this.#allOffers;
   }
 
-  getWaypointDestinations = (wayPoint) => this.#allDestinations.find((destination) => wayPoint.destination === destination.id);
-
-  getWaypointOffers = (wayPoint) => this.getWaypointOffersByType(wayPoint).filter((offer) => wayPoint.offers.includes(offer.id));
-
-  getWaypointOffersByType = (wayPoint) => this.#allOffers.find((offer) => offer.type === wayPoint.type).offers;
+  getWaypointDestinations = (wayPoint) => getDestination(wayPoint.destination, this.#allDestinations);
+  getWaypointOffers = (wayPoint) => getOffersByType(wayPoint.type, this.#allOffers).filter((offer) => wayPoint.offers.includes(offer.id));
 }

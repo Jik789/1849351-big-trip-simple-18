@@ -17,14 +17,19 @@ const createWaypointTemplate = (waypoint, offers, destination) => {
   const robotDateTimeFrom = robotDateTime(dateFrom);
   const robotDateTimeTo = robotDateTime(dateTo);
 
-  const createOffersWaypointTemplate = (allOffers) =>
-    (allOffers.map((offer) =>
+  const createOffersWaypointTemplate = (allOffers) => {
+    if (offers.length === 0) {
+      return ` <li class="event__offer">
+                <span class="event__offer-title">No additional offers</span>
+              </li>`;
+    }
+    return allOffers.map((offer) =>
       `<li class="event__offer">
-        <span class="event__offer-title">${offer.title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
-      </li>`).join('')
-    );
+      <span class="event__offer-title">${offer.title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${offer.price}</span>
+    </li>`).join('');
+  };
 
   return (`
   <li class="trip-events__item">

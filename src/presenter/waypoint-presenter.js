@@ -41,9 +41,7 @@ export default class WaypointPresenter {
 
     this.#waypointComponentEdit = new FormEditView(
       waypoint,
-      this.waypointsModel.getWaypointOffers(waypoint),
-      this.waypointsModel.getWaypointDestinations(waypoint),
-      this.waypointsModel.getWaypointOffersByType(waypoint),
+      this.waypointsModel.allOffers,
       this.waypointsModel.allDestinations
     );
 
@@ -77,6 +75,7 @@ export default class WaypointPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#waypointComponentEdit.reset(this.#waypoint);
       this.#replaceFormToCard();
     }
   };
@@ -84,6 +83,7 @@ export default class WaypointPresenter {
   #onEscKeyDown = (event) => {
     if (event.key === 'Escape' || event.key === 'Esc') {
       event.preventDefault();
+      this.#waypointComponentEdit.reset(this.#waypoint);
       this.#replaceFormToCard();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
@@ -109,6 +109,7 @@ export default class WaypointPresenter {
 
   #setClickFormToCard = () => {
     this.#replaceFormToCard();
+    this.#waypointComponentEdit.reset(this.#waypoint);
     document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 
