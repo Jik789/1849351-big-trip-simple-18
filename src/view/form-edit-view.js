@@ -9,7 +9,7 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
 
-  const foundDestination = getDestination(waypoint.destination, allDestinations);
+  const destinationById = getDestination(waypoint.destination, allDestinations);
   const offersByType = getOffersByType(waypoint.type, allOffers);
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
@@ -27,7 +27,7 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   const createOffersByTypeTemplate = () => (offersByType.map((offer, offerIndex) => {
     const checked = waypoint.offers.includes(offer.id) ? 'checked' : '';
     return `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" type="checkbox" name="event-offer-luggage" ${checked}>
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" data-index="${offer.id}" type="checkbox" name="event-offer-luggage" ${checked}>
       <label class="event__offer-label" for="event-offer-${offerIndex}">
         <span class="event__offer-title">${offer.title}</span>
         +€&nbsp;
@@ -46,10 +46,10 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   )).join(''));
 
   const createPhotosContainerTemplate = () => {
-    if ('pictures' in foundDestination) {
+    if ('pictures' in destinationById) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
-       ${createPhotosTemplate(foundDestination.pictures)}
+       ${createPhotosTemplate(destinationById.pictures)}
       </div>
     </div>`;
     } else {
@@ -59,7 +59,7 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
 
   const createDestinationsContainerTemplate = () => `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${foundDestination.description}</p>
+      <p class="event__destination-description">${destinationById.description}</p>
       ${createPhotosContainerTemplate()}
     </section>`;
 
@@ -86,7 +86,7 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
     <label class="event__label  event__type-output" for="event-destination-1">
       ${waypoint.type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${foundDestination.name}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationById.name}" list="destination-list-1">
     <datalist id="destination-list-1">
       ${createDestinationOptionsTemplate()}
     </datalist>
@@ -154,13 +154,13 @@ export default class FormEditView extends AbstractStatefulView {
   });
 
   #setInnerHandlers = () => {
-    Array.from(this.element.querySelectorAll('.event__type-input')).forEach((typeElement) => typeElement
-      .addEventListener('click', this.#eventTypeHandler));
-    // this.element.querySelector('.event__input--destination').addEventListener('submit', this.#eventDestinationHandler);
+    Array.from(this.element.querySelectorAll('.event__type-input')).forEach((typeElement) => typeElement.addEventListener('click', this.#eventTypeHandler));
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#eventPriceHandler);
+    this.element.querySelector('.event__available-offers').addEventListener('change', this.#eventOfferHandler);
   };
 
   // #eventDestinationHandler = (event) => {
-  //   const destinationId = this.#allDestination.find((destination) => destination.name === event.target.value);
+  //   const destinationId = this.#allDestinations.find((destination) => destination.name === event.target.value);
   //   this.updateElement({
   //     destination: destinationId,
   //   });
@@ -171,6 +171,31 @@ export default class FormEditView extends AbstractStatefulView {
     this.updateElement({
       type: event.target.value,
       offers: [],
+    });
+  };
+
+  #eventPriceHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      basePrice: evt.target.value,
+    });
+  };
+
+  #eventOfferHandler = (event) => {
+    event.preventDefault();
+    const currentOffers = Array.from(this._state.offers);
+    const offerId = Number(event.target.dataset.index);
+
+    if (event.target.checked) {
+      currentOffers.push(offerId);
+    }
+
+    if (!event.target.checked) {
+      currentOffers.splice(currentOffers.indexOf(offerId), 1);
+    }
+
+    this.updateElement({
+      offers: currentOffers
     });
   };
 
