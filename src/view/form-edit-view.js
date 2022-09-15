@@ -4,6 +4,8 @@ import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   const dateFrom = waypoint.dateFrom;
@@ -133,12 +135,17 @@ export default class FormEditView extends AbstractStatefulView {
   #allOffers = null;
   #allDestinations = null;
 
+  #datepickerStart = null;
+  #datepickerEnd = null;
+
   constructor(waypoint = DEFAULT_WAY_POINT, allOffers = [], allDestinations = []) {
     super();
     this.#allDestinations = allDestinations;
     this.#allOffers = allOffers;
     this._state = FormEditView.parseWaypointToState(waypoint);
     this.#setInnerHandlers();
+    this.#setDatepickerStart();
+    this.#setDatepickerEnd();
   }
 
   get template() {
@@ -158,6 +165,34 @@ export default class FormEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('change', this.#eventPriceHandler);
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#eventOfferHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#eventDestinationHandler);
+  };
+
+  // Перегружаем метод родителя removeElement,
+  // чтобы при удалении удалялся более не нужный календарь
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
+  };
+
+  #eventTimeStartHandler = ([userDate]) => {
+    this._setState({
+      dateFrom: userDate,
+    });
+  };
+
+  #eventTimeEndHandler = ([userDate]) => {
+    this._setState({
+      dateTo: [userDate],
+    });
   };
 
   #eventDestinationHandler = (evt) => {
@@ -206,6 +241,35 @@ export default class FormEditView extends AbstractStatefulView {
     this.#setInnerHandlers();
     this.setSubmitHandler(this._callback.submit);
     this.setClickHandler(this._callback.click);
+    this.#setDatepickerStart();
+    this.#setDatepickerEnd();
+  };
+
+  #setDatepickerStart = () => {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        enableTime: true,
+        'time_24hr': true,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.dateFrom,
+        onClose: this.#eventTimeStartHandler,
+      },
+    );
+  };
+
+  #setDatepickerEnd = () => {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        enableTime: true,
+        'time_24hr': true,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.dateTo,
+        minDate: this._state.dateFrom,
+        onClose: this.#eventTimeEndHandler,
+      },
+    );
   };
 
   setClickHandler = (callback) => {
@@ -227,4 +291,5 @@ export default class FormEditView extends AbstractStatefulView {
     event.preventDefault();
     this._callback.submit(FormEditView.parseStateToWaypoint(this._state));
   };
+
 }
