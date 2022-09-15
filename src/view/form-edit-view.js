@@ -133,7 +133,7 @@ export default class FormEditView extends AbstractStatefulView {
   #allOffers = null;
   #allDestinations = null;
 
-  constructor(waypoint = DEFAULT_WAY_POINT, allDestinations = [], allOffers = []) {
+  constructor(waypoint = DEFAULT_WAY_POINT, allOffers = [], allDestinations = []) {
     super();
     this.#allDestinations = allDestinations;
     this.#allOffers = allOffers;
@@ -142,7 +142,7 @@ export default class FormEditView extends AbstractStatefulView {
   }
 
   get template() {
-    return createFormEditTemplate(this._state, this.#allDestinations, this.#allOffers);
+    return createFormEditTemplate(this._state, this.#allOffers, this.#allDestinations);
   }
 
   static parseWaypointToState = (waypoint) => ({
@@ -157,14 +157,17 @@ export default class FormEditView extends AbstractStatefulView {
     Array.from(this.element.querySelectorAll('.event__type-input')).forEach((typeElement) => typeElement.addEventListener('click', this.#eventTypeHandler));
     this.element.querySelector('.event__input--price').addEventListener('change', this.#eventPriceHandler);
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#eventOfferHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#eventDestinationHandler);
   };
 
-  // #eventDestinationHandler = (event) => {
-  //   const destinationId = this.#allDestinations.find((destination) => destination.name === event.target.value);
-  //   this.updateElement({
-  //     destination: destinationId,
-  //   });
-  // };
+  #eventDestinationHandler = (evt) => {
+    evt.preventDefault();
+    if (evt.target.value !== '') {
+      this.updateElement({
+        destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,
+      });
+    }
+  };
 
   #eventTypeHandler = (event) => {
     event.preventDefault();
@@ -176,7 +179,7 @@ export default class FormEditView extends AbstractStatefulView {
 
   #eventPriceHandler = (evt) => {
     evt.preventDefault();
-    this.updateElement({
+    this._setState({
       basePrice: evt.target.value,
     });
   };

@@ -4,15 +4,15 @@ export const destinationMock = () => ([{
   'name': 'Анапа',
   'pictures': [
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=1',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=2',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=3',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     }
   ]
@@ -23,15 +23,15 @@ export const destinationMock = () => ([{
   'name': 'Рязань',
   'pictures': [
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=4',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=5',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=6',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     }
   ]
@@ -42,15 +42,15 @@ export const destinationMock = () => ([{
   'name': 'Москва',
   'pictures': [
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=7',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=8',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=9',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     }
   ]
@@ -61,15 +61,15 @@ export const destinationMock = () => ([{
   'name': 'Коломна',
   'pictures': [
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=10',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=11',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=12',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     }
   ]
@@ -80,15 +80,15 @@ export const destinationMock = () => ([{
   'name': 'Волгоград',
   'pictures': [
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=13',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=14',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=15',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     }
   ]
@@ -99,15 +99,15 @@ export const destinationMock = () => ([{
   'name': 'Краснодар',
   'pictures': [
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=16',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=17',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=18',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     }
   ]
@@ -118,15 +118,15 @@ export const destinationMock = () => ([{
   'name': 'Луховицы',
   'pictures': [
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=19',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=20',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=21',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     }
   ]
@@ -137,15 +137,15 @@ export const destinationMock = () => ([{
   'name': 'Геленджик',
   'pictures': [
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=22',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=23',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     },
     {
-      'src': 'http://picsum.photos/300/200?r=0.0762563005163317',
+      'src': 'http://loremflickr.com/248/152?lock=24',
       'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.'
     }
   ]
