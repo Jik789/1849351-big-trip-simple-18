@@ -2,7 +2,6 @@
 
 import {render, RenderPosition} from '../framework/render.js';
 import EventListView from '../view/event-list-view';
-import WaypointModel from '../model/waypoint-model';
 import NoWaypointView from '../view/no-waypoint-view';
 import SortView from '../view/sort-view';
 import WaypointPresenter from './waypoint-presenter';
@@ -15,23 +14,31 @@ export default class BoardPresenter {
   #noWaypointComponent = new NoWaypointView();
 
   #waypointPresenter = new Map();
-  #renderedWaypointCount = null;
   #currentSortType = SortType.DAY;
-  waypoints = [];
+  boardWaypoints = [];
   sourcedWaypoints = [];
 
-  init = (parentContainer) => {
-    this.parentContainer = parentContainer;
-    this.waypointsModel = new WaypointModel();
+  #parentContainer = null;
+  #waypointsModel = null;
 
-    this.waypoints = [...this.waypointsModel.waypoints];
-    this.sourcedWaypoints = [...this.waypointsModel.waypoints];
+  constructor(parentContainer, waypointsModel) {
+    this.#parentContainer = parentContainer;
+    this.#waypointsModel = waypointsModel;
+  }
+
+  init = () => {
+    this.boardWaypoints = [...this.#waypointsModel.waypoints];
+    this.sourcedWaypoints = [...this.#waypointsModel.waypoints];
 
     this.#renderSort();
     this.#renderEventList();
 
     this.#sortWaypoints(this.#currentSortType);
   };
+
+  get waypoints() {
+    return this.#waypointsModel.waypoints;
+  }
 
   #renderWayPoints = (wayPoint) => {
     const waypointPresenter = new WaypointPresenter(this.#eventListComponent.element, this.#handleWaypointChange, this.#handleModeChange);
@@ -40,12 +47,12 @@ export default class BoardPresenter {
   };
 
   #renderSort = () => {
-    render(this.#sortComponent, this.parentContainer);
+    render(this.#sortComponent, this.#parentContainer);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
 
   #renderEventList = () => {
-    render(this.#eventListComponent, this.parentContainer);
+    render(this.#eventListComponent, this.#parentContainer);
   };
 
   #renderNowayPoints = () => {
@@ -59,7 +66,7 @@ export default class BoardPresenter {
   };
 
   #handleWaypointChange = (waypointUpdate) => {
-    this.waypoints = updateItem(this.waypoints, waypointUpdate);
+    this.boardWaypoints = updateItem(this.boardWaypoints, waypointUpdate);
     this.sourcedWaypoints = updateItem(this.sourcedWaypoints, waypointUpdate);
     this.#waypointPresenter.get(waypointUpdate.id).init(waypointUpdate);
   };
@@ -78,23 +85,23 @@ export default class BoardPresenter {
   #sortWaypoints = (sortType) => {
     switch (sortType) {
       case SortType.DAY:
-        this.waypoints.sort(sortWaypointDay);
+        this.boardWaypoints.sort(sortWaypointDay);
         break;
       case SortType.PRICE:
-        this.waypoints.sort(sortWaypointPrice);
+        this.boardWaypoints.sort(sortWaypointPrice);
         break;
       default:
-        this.waypoints = [...this.sourcedWaypoints];
+        this.boardWaypoints = [...this.sourcedWaypoints];
     }
 
     this.#currentSortType = sortType;
     this.#clearWaypointList();
 
-    if (!(this.waypoints.length > 0)) {
+    if (!(this.boardWaypoints.length > 0)) {
       this.#renderNowayPoints();
     } else {
-      for (let i = 0; i < this.waypoints.length; i++) {
-        this.#renderWayPoints(this.waypoints[i]);
+      for (let i = 0; i < this.boardWaypoints.length; i++) {
+        this.#renderWayPoints(this.boardWaypoints[i]);
       }
     }
   };

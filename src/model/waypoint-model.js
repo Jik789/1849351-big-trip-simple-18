@@ -4,8 +4,9 @@ import { destinationMock } from '../mock/destination-mock';
 import { offerMock } from '../mock/offer-mock';
 import { waypointMock } from '../mock/waypoint-mock';
 import { getDestination, getOffersByType } from '../utils/utils';
+import Observable from '../framework/observable.js';
 
-export default class WaypointModel {
+export default class WaypointModel extends Observable {
   #wayPoints = Array.from({length: WAYPOINT_COUNT}, (_value, index) => waypointMock(index + 1));
   #allDestinations = destinationMock();
   #allOffers = offerMock();
