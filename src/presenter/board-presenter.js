@@ -15,8 +15,6 @@ export default class BoardPresenter {
 
   #waypointPresenter = new Map();
   #currentSortType = SortType.DAY;
-  boardWaypoints = [];
-  sourcedWaypoints = [];
 
   #parentContainer = null;
   #waypointsModel = null;
@@ -27,16 +25,16 @@ export default class BoardPresenter {
   }
 
   init = () => {
-    this.boardWaypoints = [...this.#waypointsModel.waypoints];
-    this.sourcedWaypoints = [...this.#waypointsModel.waypoints];
-
-    this.#renderSort();
-    this.#renderEventList();
-
-    this.#sortWaypoints(this.#currentSortType);
+    this.#renderBoard();
   };
 
   get waypoints() {
+    switch (this.#currentSortType) {
+      case SortType.DAY:
+        return [...this.#waypointsModel.waypoints].sort(sortWaypointDay);
+      case SortType.PRICE:
+        return [...this.#waypointsModel.waypoints].sort(sortWaypointPrice);
+    }
     return this.#waypointsModel.waypoints;
   }
 
@@ -51,11 +49,7 @@ export default class BoardPresenter {
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
 
-  #renderEventList = () => {
-    render(this.#eventListComponent, this.#parentContainer);
-  };
-
-  #renderNowayPoints = () => {
+  #renderNoWayPoints = () => {
     render(this.#noWaypointComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
   };
 
@@ -79,30 +73,27 @@ export default class BoardPresenter {
     if (this.#currentSortType === sortType) {
       return;
     }
-    this.#sortWaypoints(sortType);
-  };
-
-  #sortWaypoints = (sortType) => {
-    switch (sortType) {
-      case SortType.DAY:
-        this.boardWaypoints.sort(sortWaypointDay);
-        break;
-      case SortType.PRICE:
-        this.boardWaypoints.sort(sortWaypointPrice);
-        break;
-      default:
-        this.boardWaypoints = [...this.sourcedWaypoints];
-    }
-
     this.#currentSortType = sortType;
     this.#clearWaypointList();
+    this.#renderWaypointsList();
+  };
 
-    if (!(this.boardWaypoints.length > 0)) {
-      this.#renderNowayPoints();
-    } else {
-      for (let i = 0; i < this.boardWaypoints.length; i++) {
-        this.#renderWayPoints(this.boardWaypoints[i]);
-      }
+  #renderWaypointsList = () => {
+    for (let i = 0; i < this.waypoints.length; i++) {
+      this.#renderWayPoints(this.waypoints[i]);
     }
   };
+
+  #renderBoard = () => {
+    this.#renderSort();
+
+    render(this.#eventListComponent, this.#parentContainer);
+    if (this.waypoints.length === 0) {
+      this.#renderNoWayPoints();
+      return;
+    }
+
+    this.#renderWaypointsList();
+  };
 }
+
