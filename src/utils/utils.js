@@ -36,6 +36,8 @@ const updateItem = (items, update) => {
   ];
 };
 
+const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+
 const sortWaypointDay = (taskA, taskB) => dayjs(taskA.dateFrom).diff(dayjs(taskB.dateFrom));
 
 const sortWaypointPrice = (taskA, taskB) => taskB.basePrice - taskA.basePrice;
@@ -44,4 +46,4 @@ const getDestination = (idDestination, allDestinations) => allDestinations.find(
 
 const getOffersByType = (typeOffer, allOffers) => allOffers.find((offer) => offer.type === typeOffer).offers;
 
-export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, getObjectIndexInArray, getDestination, getOffersByType};
+export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, getObjectIndexInArray, getDestination, getOffersByType, isDatesEqual};

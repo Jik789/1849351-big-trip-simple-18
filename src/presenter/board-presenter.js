@@ -1,16 +1,16 @@
 // @ts-nocheck
 
-import {render, RenderPosition} from '../framework/render.js';
+import {render, RenderPosition, remove} from '../framework/render.js';
 import EventListView from '../view/event-list-view';
 import NoWaypointView from '../view/no-waypoint-view';
 import SortView from '../view/sort-view';
 import WaypointPresenter from './waypoint-presenter';
-import { updateItem, sortWaypointDay, sortWaypointPrice } from '../utils/utils';
-import { SortType } from '../const.js';
+import { sortWaypointDay, sortWaypointPrice } from '../utils/utils';
+import {SortType, UpdateType, UserAction} from '../const.js';
 
 export default class BoardPresenter {
   #eventListComponent = new EventListView();
-  #sortComponent = new SortView();
+  #sortComponent = null;
   #noWaypointComponent = new NoWaypointView();
 
   #waypointPresenter = new Map();
@@ -22,6 +22,8 @@ export default class BoardPresenter {
   constructor(parentContainer, waypointsModel) {
     this.#parentContainer = parentContainer;
     this.#waypointsModel = waypointsModel;
+
+    this.#waypointsModel.addObserver(this.#handleModelEvent);
   }
 
   init = () => {
@@ -38,31 +40,54 @@ export default class BoardPresenter {
     return this.#waypointsModel.waypoints;
   }
 
+  #handleViewAction = (actionType, updateType, update) => {
+    switch (actionType) {
+      case UserAction.UPDATE_TASK:
+        this.#waypointsModel.updateTask(updateType, update);
+        break;
+      case UserAction.ADD_TASK:
+        this.#waypointsModel.addTask(updateType, update);
+        break;
+      case UserAction.DELETE_TASK:
+        this.#waypointsModel.deleteTask(updateType, update);
+        break;
+    }
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        // - обновить часть списка (например, когда поменялось описание)
+        this.#waypointPresenter.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        // - обновить список (например, когда задача ушла в архив)
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
+      case UpdateType.MAJOR:
+        this.#clearBoard({resetSortType: true});
+        this.#renderBoard();
+        // - обновить всю доску (например, при переключении фильтра)
+        break;
+    }
+  };
+
+
   #renderWayPoints = (wayPoint) => {
-    const waypointPresenter = new WaypointPresenter(this.#eventListComponent.element, this.#handleWaypointChange, this.#handleModeChange);
+    const waypointPresenter = new WaypointPresenter(this.#eventListComponent.element, this.#handleViewAction, this.#handleModeChange);
     waypointPresenter.init(wayPoint);
     this.#waypointPresenter.set(wayPoint.id, waypointPresenter);
   };
 
   #renderSort = () => {
-    render(this.#sortComponent, this.#parentContainer);
+    this.#sortComponent = new SortView(this.#currentSortType);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+    render(this.#sortComponent, this.#parentContainer);
   };
 
   #renderNoWayPoints = () => {
     render(this.#noWaypointComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
-  };
-
-  #clearWaypointList = () => {
-    this.#waypointPresenter.forEach((presenter) => presenter.destroy());
-    this.#waypointPresenter.clear();
-
-  };
-
-  #handleWaypointChange = (waypointUpdate) => {
-    this.boardWaypoints = updateItem(this.boardWaypoints, waypointUpdate);
-    this.sourcedWaypoints = updateItem(this.sourcedWaypoints, waypointUpdate);
-    this.#waypointPresenter.get(waypointUpdate.id).init(waypointUpdate);
   };
 
   #handleModeChange = () => {
@@ -74,26 +99,37 @@ export default class BoardPresenter {
       return;
     }
     this.#currentSortType = sortType;
-    this.#clearWaypointList();
-    this.#renderWaypointsList();
+    this.#clearBoard();
+    this.#renderBoard();
   };
 
-  #renderWaypointsList = () => {
-    for (let i = 0; i < this.waypoints.length; i++) {
-      this.#renderWayPoints(this.waypoints[i]);
+  #clearBoard = ({resetSortType = false} = {}) => {
+    this.#waypointPresenter.forEach((presenter) => presenter.destroy());
+    this.#waypointPresenter.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noWaypointComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DEFAULT;
     }
   };
 
   #renderBoard = () => {
+    const waypoints = this.waypoints;
+    const waypointsCount = waypoints.length;
+
     this.#renderSort();
 
     render(this.#eventListComponent, this.#parentContainer);
-    if (this.waypoints.length === 0) {
+    if (waypointsCount === 0) {
       this.#renderNoWayPoints();
       return;
     }
 
-    this.#renderWaypointsList();
+    for (let i = 0; i < waypointsCount; i++) {
+      this.#renderWayPoints(this.waypoints[i]);
+    }
   };
 }
 

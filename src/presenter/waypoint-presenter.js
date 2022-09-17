@@ -3,6 +3,7 @@ import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';
 import { render, replace, remove } from '../framework/render.js';
 import WaypointModel from '../model/waypoint-model';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -115,7 +116,11 @@ export default class WaypointPresenter {
 
   #setSubmitHandler = (waypoint) => {
     this.#replaceFormToCard();
-    this.#changeData(waypoint);
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      waypoint,
+    );
     document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 }

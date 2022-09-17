@@ -292,4 +292,9 @@ export default class FormEditView extends AbstractStatefulView {
     this._callback.submit(FormEditView.parseStateToWaypoint(this._state));
   };
 
+  reset = (waypoint) => {
+    this.updateElement(
+      FormEditView.parseWaypointToState(waypoint),
+    );
+  };
 }
