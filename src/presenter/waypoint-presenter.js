@@ -109,8 +109,8 @@ export default class WaypointPresenter {
   };
 
   #setClickFormToCard = () => {
-    this.#replaceFormToCard();
     this.#waypointComponentEdit.reset(this.#waypoint);
+    this.#replaceFormToCard();
     document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 
