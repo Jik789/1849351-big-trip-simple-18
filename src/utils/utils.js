@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { UNIT_DATE } from '../mock/const-mock';
 
 const humanizeDate = (dueDate) => dayjs(dueDate).format('D MMMM');
 const humanizeTime = (dueDate) => dayjs(dueDate).format('HH:mm');
@@ -46,4 +47,6 @@ const getDestination = (idDestination, allDestinations) => allDestinations.find(
 
 const getOffersByType = (typeOffer, allOffers) => allOffers.find((offer) => offer.type === typeOffer).offers;
 
-export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, getObjectIndexInArray, getDestination, getOffersByType, isDatesEqual};
+const isFutureDate = (dateStart, dateEnd) => dayjs().isBefore(dayjs(dateStart), UNIT_DATE) || dayjs().isBefore(dayjs(dateEnd), UNIT_DATE);
+
+export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, getObjectIndexInArray, getDestination, getOffersByType, isDatesEqual, isFutureDate};

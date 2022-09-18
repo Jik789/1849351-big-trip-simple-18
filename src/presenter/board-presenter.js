@@ -7,6 +7,7 @@ import SortView from '../view/sort-view';
 import WaypointPresenter from './waypoint-presenter';
 import { sortWaypointDay, sortWaypointPrice } from '../utils/utils';
 import {SortType, UpdateType, UserAction} from '../const.js';
+import { filter } from '../utils/filter.js';
 
 export default class BoardPresenter {
   #eventListComponent = new EventListView();
@@ -18,12 +19,15 @@ export default class BoardPresenter {
 
   #parentContainer = null;
   #waypointsModel = null;
+  #filterModel = null;
 
-  constructor(parentContainer, waypointsModel) {
+  constructor(parentContainer, waypointsModel, filterModel) {
     this.#parentContainer = parentContainer;
     this.#waypointsModel = waypointsModel;
+    this.#filterModel = filterModel;
 
     this.#waypointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   init = () => {
@@ -31,13 +35,17 @@ export default class BoardPresenter {
   };
 
   get waypoints() {
+    const filterType = this.#filterModel.filter;
+    const tasks = this.#waypointsModel.waypoints;
+    const filteredTasks = filter[filterType](tasks);
+
     switch (this.#currentSortType) {
       case SortType.DAY:
-        return [...this.#waypointsModel.waypoints].sort(sortWaypointDay);
+        return filteredTasks.sort(sortWaypointDay);
       case SortType.PRICE:
-        return [...this.#waypointsModel.waypoints].sort(sortWaypointPrice);
+        return filteredTasks.sort(sortWaypointPrice);
     }
-    return this.#waypointsModel.waypoints;
+    return filteredTasks;
   }
 
   #handleViewAction = (actionType, updateType, update) => {
