@@ -119,7 +119,7 @@ export default class BoardPresenter {
     remove(this.#noWaypointComponent);
 
     if (resetSortType) {
-      this.#currentSortType = SortType.DEFAULT;
+      this.#currentSortType = SortType.DAY;
     }
   };
 
