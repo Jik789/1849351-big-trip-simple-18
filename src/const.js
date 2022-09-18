@@ -15,4 +15,9 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
-export {SortType, UserAction, UpdateType};
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+};
+
+export {SortType, UserAction, UpdateType, FilterType};
