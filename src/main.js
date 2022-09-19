@@ -24,7 +24,7 @@ const handleNewWaypointFormClose = () => {
 };
 
 const handleNewWaypointButtonClick = () => {
-  boardPresenter.createTask(handleNewWaypointFormClose);
+  boardPresenter.createWaypoint(handleNewWaypointFormClose);
   addWaypointButtonElement.disabled = true;
 };
 

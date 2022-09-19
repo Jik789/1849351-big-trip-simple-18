@@ -12,7 +12,7 @@ const DEFAULT_WAY_POINT = {
   basePrice: 0,
   dateFrom: null,
   dateTo: null,
-  destination: '',
+  destination: 5,
   offers: [],
   type: WAYPOINT_TYPE_MOCK[0],
 };

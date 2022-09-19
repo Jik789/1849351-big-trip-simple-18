@@ -5,6 +5,7 @@ import EventListView from '../view/event-list-view';
 import NoWaypointView from '../view/no-waypoint-view';
 import SortView from '../view/sort-view';
 import WaypointPresenter from './waypoint-presenter';
+import WaypointNewPresenter from './waypoint-new-presenter';
 import { sortWaypointDay, sortWaypointPrice } from '../utils/utils';
 import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 import { filter } from '../utils/filter.js';
@@ -15,6 +16,7 @@ export default class BoardPresenter {
   #noWaypointComponent = null;
 
   #waypointPresenter = new Map();
+  #waypointNewPresenter = null;
   #currentSortType = SortType.DAY;
 
   #parentContainer = null;
@@ -29,6 +31,7 @@ export default class BoardPresenter {
 
     this.#waypointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#waypointNewPresenter = new WaypointNewPresenter(this.#eventListComponent.element, this.#handleViewAction);
   }
 
   init = () => {
@@ -140,9 +143,12 @@ export default class BoardPresenter {
       return;
     }
 
-    for (let i = 0; i < waypointsCount; i++) {
-      this.#renderWayPoints(this.waypoints[i]);
-    }
+    this.waypoints.forEach((element) => this.#renderWayPoints(element));
+  };
+
+  createWaypoint = (callback) => {
+    this.#currentSortType = SortType.DAY;
+    this.#waypointNewPresenter.init(callback);
   };
 }
 
