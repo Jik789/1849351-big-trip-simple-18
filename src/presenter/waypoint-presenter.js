@@ -3,7 +3,8 @@ import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';
 import { render, replace, remove } from '../framework/render.js';
 import WaypointModel from '../model/waypoint-model';
-import {UserAction, UpdateType} from '../const.js';
+import { UserAction, UpdateType } from '../const.js';
+import { isDatesEqual } from '../utils/utils';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -49,6 +50,7 @@ export default class WaypointPresenter {
     this.#waypointComponent.setClickHandler(this.#setClickCardToForm);
     this.#waypointComponentEdit.setClickHandler(this.#setClickFormToCard);
     this.#waypointComponentEdit.setSubmitHandler(this.#setSubmitHandler);
+    this.#waypointComponentEdit.setDeleteClickHandler(this.#handleDeleteClick);
 
     if (prevWaypointComponent === null || prevWaypointComponentEdit === null) {
       render(this.#waypointComponent, this.#waypointListContainer);
@@ -114,13 +116,23 @@ export default class WaypointPresenter {
     document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 
-  #setSubmitHandler = (waypoint) => {
-    this.#replaceFormToCard();
+  #setSubmitHandler = (update) => {
+    const isMinorUpdate = !isDatesEqual(this.#waypoint.dueDate, update.dueDate);
+
     this.#changeData(
       UserAction.UPDATE_TASK,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update,
+    );
+    this.#replaceFormToCard();
+  };
+
+  #handleDeleteClick = (waypoint) => {
+    this.#changeData(
+      UserAction.DELETE_TASK,
       UpdateType.MINOR,
       waypoint,
     );
-    document.removeEventListener('keydown', this.#onEscKeyDown);
+    this.#replaceFormToCard();
   };
 }

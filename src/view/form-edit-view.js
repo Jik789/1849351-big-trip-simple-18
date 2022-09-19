@@ -243,6 +243,7 @@ export default class FormEditView extends AbstractStatefulView {
     this.setClickHandler(this._callback.click);
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
+    this.setDeleteClickHandler(this._callback.deleteClick);
   };
 
   #setDatepickerStart = () => {
@@ -296,5 +297,15 @@ export default class FormEditView extends AbstractStatefulView {
     this.updateElement(
       FormEditView.parseWaypointToState(waypoint),
     );
+  };
+
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteClick(FormEditView.parseStateToWaypoint(this._state));
   };
 }
