@@ -8,6 +8,7 @@ import FilterModel from './model/filter-model.js';
 
 const siteFilterElement = document.querySelector('.trip-controls__filters');
 const siteTripEventElement = document.querySelector('.trip-events');
+const addWaypointButtonElement = document.querySelector('.trip-main__event-add-btn');
 
 const waypointModel = new WaypointModel();
 const filterModel = new FilterModel();
@@ -17,3 +18,14 @@ boardPresenter.init();
 
 const filterPresenter = new FilterPresenter(siteFilterElement, filterModel, waypointModel);
 filterPresenter.init();
+
+const handleNewWaypointFormClose = () => {
+  addWaypointButtonElement.disabled = false;
+};
+
+const handleNewWaypointButtonClick = () => {
+  boardPresenter.createTask(handleNewWaypointFormClose);
+  addWaypointButtonElement.disabled = true;
+};
+
+addWaypointButtonElement.addEventListener('click', handleNewWaypointButtonClick);

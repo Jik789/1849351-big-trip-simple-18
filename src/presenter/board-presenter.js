@@ -6,13 +6,13 @@ import NoWaypointView from '../view/no-waypoint-view';
 import SortView from '../view/sort-view';
 import WaypointPresenter from './waypoint-presenter';
 import { sortWaypointDay, sortWaypointPrice } from '../utils/utils';
-import {SortType, UpdateType, UserAction} from '../const.js';
+import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 import { filter } from '../utils/filter.js';
 
 export default class BoardPresenter {
   #eventListComponent = new EventListView();
   #sortComponent = null;
-  #noWaypointComponent = new NoWaypointView();
+  #noWaypointComponent = null;
 
   #waypointPresenter = new Map();
   #currentSortType = SortType.DAY;
@@ -20,6 +20,7 @@ export default class BoardPresenter {
   #parentContainer = null;
   #waypointsModel = null;
   #filterModel = null;
+  #filterType = FilterType.EVERYTHING;
 
   constructor(parentContainer, waypointsModel, filterModel) {
     this.#parentContainer = parentContainer;
@@ -35,9 +36,9 @@ export default class BoardPresenter {
   };
 
   get waypoints() {
-    const filterType = this.#filterModel.filter;
+    this.#filterType = this.#filterModel.filter;
     const tasks = this.#waypointsModel.waypoints;
-    const filteredTasks = filter[filterType](tasks);
+    const filteredTasks = filter[this.#filterType](tasks);
 
     switch (this.#currentSortType) {
       case SortType.DAY:
@@ -95,6 +96,7 @@ export default class BoardPresenter {
   };
 
   #renderNoWayPoints = () => {
+    this.#noWaypointComponent = new NoWaypointView(this.#filterType);
     render(this.#noWaypointComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
   };
 
@@ -116,7 +118,10 @@ export default class BoardPresenter {
     this.#waypointPresenter.clear();
 
     remove(this.#sortComponent);
-    remove(this.#noWaypointComponent);
+
+    if (this.#noWaypointComponent) {
+      remove(this.#noWaypointComponent);
+    }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;

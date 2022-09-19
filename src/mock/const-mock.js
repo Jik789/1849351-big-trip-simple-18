@@ -1,4 +1,4 @@
-const WAYPOINT_COUNT = 8; // БОЛЬШЕ 8 НЕЗЯ
+const WAYPOINT_COUNT = 4; // БОЛЬШЕ 8 НЕЗЯ
 
 const UNIT_DATE = 'minute';
 const BASE_PRICE_MOCK = [500, 600, 700, 800, 900, 1000];
