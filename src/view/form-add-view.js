@@ -178,7 +178,7 @@ export default class FormAddView extends AbstractStatefulView {
   // #datepickerStart = null;
   // #datepickerEnd = null;
 
-  constructor(waypoint = DEFAULT_WAY_POINT, allOffers = [], allDestinations = []) {
+  constructor(waypoint = DEFAULT_WAY_POINT) {
     super();
     this._state = FormAddView.parseWaypointToState(waypoint);
     // this.#allDestinations = allDestinations;
@@ -190,6 +190,7 @@ export default class FormAddView extends AbstractStatefulView {
   }
 
   get template() {
+    console.log(this._state);
     return createFormAddTemplate(this._state);
   }
 

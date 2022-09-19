@@ -1,4 +1,4 @@
-const WAYPOINT_COUNT = 4; // БОЛЬШЕ 8 НЕЗЯ
+const WAYPOINT_COUNT = 4; // БОЛЬШЕ 8 НЕЗЯ ПОТОМУ ЧТО ДЕСТИНИШИОН СДЕЛАЛ ВСЕГО 8, А ID ВЫДАЕТСЯ ПО ВОЗРАСТАНИЮ, КАРОЧ ТУТ ЧИСТО МОКОВЫЕ ЗАМОРОЧКИ
 
 const UNIT_DATE = 'minute';
 const BASE_PRICE_MOCK = [500, 600, 700, 800, 900, 1000];
@@ -10,9 +10,9 @@ const NAME_MOCK = ['Москва', 'Париж', 'Пекин', 'Киев', 'Бу
 const DEFAULT_WAY_POINT = {
   id: 0,
   basePrice: 0,
-  dateFrom: null,
-  dateTo: null,
-  destination: 5,
+  dateFrom: '2020-01-01T00:00:00.000Z',
+  dateTo: '2021-01-01T00:00:00.000Z',
+  destination: 1,
   offers: [],
   type: WAYPOINT_TYPE_MOCK[0],
 };

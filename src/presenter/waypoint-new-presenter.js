@@ -46,14 +46,14 @@ export default class WaypointNewPresenter {
   };
 
   #handleFormSubmit = (waypoint) => {
-    console.log(waypoint)
     this.#changeData(
       UserAction.ADD_TASK,
-      UpdateType.MINOR,
+      UpdateType.MAJOR,
       // Пока у нас нет сервера, который бы после сохранения
       // выдывал честный id задачи, нам нужно позаботиться об этом самим
       {id: nanoid(), ...waypoint},
     );
+    console.log(waypoint)
     this.destroy();
   };
 

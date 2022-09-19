@@ -147,7 +147,7 @@ export default class BoardPresenter {
   };
 
   createWaypoint = (callback) => {
-    this.#currentSortType = SortType.DAY;
+    this.#handleModelEvent('MAJOR'); // КОСТЫЛЬ ДЛЯ СБРОСА СОРТИРОВКИ, НО ФИЛЬТРЫ НЕ СКИДЫВАЕТ
     this.#waypointNewPresenter.init(callback);
   };
 }
