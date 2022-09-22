@@ -4,14 +4,17 @@ import {remove, render, RenderPosition} from '../framework/render.js';
 import FormAddView from '../view/form-add-view';
 import {nanoid} from 'nanoid';
 import {UserAction, UpdateType} from '../const.js';
+import { DEFAULT_WAY_POINT } from '../const.js';
 
 export default class WaypointNewPresenter {
+  #waypointsModel = null;
   #waypointListContainer = null;
   #changeData = null;
   #waypointNewComponent = null;
   #destroyCallback = null;
 
-  constructor(waypointListContainer, changeData) {
+  constructor(waypointsModel, waypointListContainer, changeData) {
+    this.#waypointsModel = waypointsModel;
     this.#waypointListContainer = waypointListContainer;
     this.#changeData = changeData;
   }
@@ -24,11 +27,15 @@ export default class WaypointNewPresenter {
       return;
     }
 
-    this.#waypointNewComponent = new FormAddView();
-    this.#waypointNewComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#waypointNewComponent.setDeleteClickHandler(this.#handleDeleteClick);
-    render(this.#waypointNewComponent, this.#waypointListContainer, RenderPosition.AFTERBEGIN);
+    this.#waypointNewComponent = new FormAddView(
+      DEFAULT_WAY_POINT,
+      this.#waypointsModel.allDestinations,
+      this.#waypointsModel.allOffers
+    );
 
+    this.#waypointNewComponent.setFormSubmitHandler(this.#handleFormSubmit);
+    this.#waypointNewComponent.setCancelClickHandler(this.#handleDeleteClick);
+    render(this.#waypointNewComponent, this.#waypointListContainer, RenderPosition.AFTERBEGIN);
     document.addEventListener('keydown', this.#escKeyDownHandler);
   };
 
@@ -48,12 +55,9 @@ export default class WaypointNewPresenter {
   #handleFormSubmit = (waypoint) => {
     this.#changeData(
       UserAction.ADD_TASK,
-      UpdateType.MAJOR,
-      // Пока у нас нет сервера, который бы после сохранения
-      // выдывал честный id задачи, нам нужно позаботиться об этом самим
-      {id: nanoid(), ...waypoint},
+      UpdateType.MINOR,
+      {...waypoint, id: nanoid()},
     );
-    console.log(waypoint)
     this.destroy();
   };
 

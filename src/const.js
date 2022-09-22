@@ -1,3 +1,7 @@
+import { nanoid } from 'nanoid';
+
+const WAYPOINT_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+
 const SortType = {
   DAY: 'day',
   PRICE: 'price',
@@ -20,4 +24,20 @@ const FilterType = {
   FUTURE: 'future',
 };
 
-export {SortType, UserAction, UpdateType, FilterType};
+const DEFAULT_WAY_POINT = {
+  id: nanoid(),
+  basePrice: 0,
+  dateFrom: null,
+  dateTo: null,
+  destination: null,
+  offers: [],
+  type: WAYPOINT_TYPE[0],
+};
+
+const DEFAULT_DESTINATION = {
+  'id': nanoid(),
+  'description': '',
+  'name': '',
+};
+
+export {SortType, UserAction, UpdateType, FilterType, DEFAULT_WAY_POINT, WAYPOINT_TYPE, DEFAULT_DESTINATION};

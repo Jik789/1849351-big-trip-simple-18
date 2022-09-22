@@ -2,7 +2,8 @@
 
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
+import { WAYPOINT_TYPE } from '../const';
+import { DEFAULT_WAY_POINT, DEFAULT_DESTINATION} from '../const.js';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -11,13 +12,13 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
 
-  const destinationById = getDestination(waypoint.destination, allDestinations);
+  const destinationById = waypoint.destination ? getDestination(waypoint.destination, allDestinations) : DEFAULT_DESTINATION; // НАСКОЛЬКО КОРРЕКТНО БЫЛО ТАК ДЕЛАТЬ?
   const offersByType = getOffersByType(waypoint.type, allOffers);
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
   const dateTimeToReadble = humanizeDateTime(dateTo);
 
-  const createEventTypeListTemplate = () => (WAYPOINT_TYPE_MOCK.map((wayPointType) => {
+  const createEventTypeListTemplate = () => (WAYPOINT_TYPE.map((wayPointType) => {
     const checked = waypoint.type === wayPointType ? 'checked' : '';
     return `<div class="event__type-item">
       <input id="event-type-${wayPointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${wayPointType}" ${checked}>

@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import { UNIT_DATE } from '../mock/const-mock';
 
-const humanizeDate = (dueDate) => dayjs(dueDate).format('D MMMM');
-const humanizeTime = (dueDate) => dayjs(dueDate).format('HH:mm');
-const humanizeDateTime = (dueDate) => dayjs(dueDate).format('DD/MM/01 HH:mm');
-const robotDate = (dueDate) => dayjs(dueDate).format('YYYY-MM-DD');
-const robotDateTime = (dueDate) => dayjs(dueDate).format('YYYY-MM-DDTHH:mm');
+const humanizeDate = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('D MMMM');
+const humanizeTime = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('HH:mm');
+const humanizeDateTime = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('DD/MM/01 HH:mm');
+const robotDate = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('YYYY-MM-DD');
+const robotDateTime = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('YYYY-MM-DDTHH:mm');
 
 
 const getRandomNumberOfRange = (min,max) => Math.floor(Math.random() * ((max + 1) - min) + min);

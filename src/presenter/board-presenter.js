@@ -31,7 +31,7 @@ export default class BoardPresenter {
 
     this.#waypointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
-    this.#waypointNewPresenter = new WaypointNewPresenter(this.#eventListComponent.element, this.#handleViewAction);
+    this.#waypointNewPresenter = new WaypointNewPresenter(this.#waypointsModel, this.#eventListComponent.element, this.#handleViewAction);
   }
 
   init = () => {
@@ -104,6 +104,7 @@ export default class BoardPresenter {
   };
 
   #handleModeChange = () => {
+    this.#waypointNewPresenter.destroy();
     this.#waypointPresenter.forEach((presenter) => presenter.resetView());
   };
 
@@ -117,6 +118,7 @@ export default class BoardPresenter {
   };
 
   #clearBoard = ({resetSortType = false} = {}) => {
+    this.#waypointNewPresenter.destroy();
     this.#waypointPresenter.forEach((presenter) => presenter.destroy());
     this.#waypointPresenter.clear();
 
@@ -147,7 +149,8 @@ export default class BoardPresenter {
   };
 
   createWaypoint = (callback) => {
-    this.#handleModelEvent('MAJOR'); // КОСТЫЛЬ ДЛЯ СБРОСА СОРТИРОВКИ, НО ФИЛЬТРЫ НЕ СКИДЫВАЕТ
+    this.#currentSortType = SortType.DAY;
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#waypointNewPresenter.init(callback);
   };
 }
