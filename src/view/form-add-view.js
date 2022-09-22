@@ -5,6 +5,7 @@ import { WAYPOINT_TYPE, DEFAULT_DESTINATION } from '../const';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { NAME_MOCK } from '../mock/const-mock';
 
 const createFormAddTemplate = (waypoint, allDestinations, allOffers) => {
   const dateFrom = waypoint.dateFrom;
@@ -180,13 +181,15 @@ export default class FormAddView extends AbstractStatefulView {
     }
   };
 
-  #eventDestinationHandler = (evt) => {
+  #eventDestinationHandler = (evt) => { // НЕМНОГО КОСТЫЛЬНЫЙ МЕТОД, НО ЗАДАНИЕ БЫЛО НЕ ОЧЕНЬ ПОНЯТНО
     evt.preventDefault();
-    if (evt.target.value !== '') {
-      this.updateElement({
-        destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,
-      });
+    if (!NAME_MOCK.includes(evt.target.value)) {
+      evt.target.value = NAME_MOCK[0];
     }
+
+    this.updateElement({
+      destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,
+    });
   };
 
   #eventTypeHandler = (event) => {
@@ -200,7 +203,7 @@ export default class FormAddView extends AbstractStatefulView {
   #eventPriceHandler = (evt) => {
     evt.preventDefault();
     this._setState({
-      basePrice: evt.target.value,
+      basePrice: Number(evt.target.value.replace(/[^\d.]/g, '')),
     });
   };
 

@@ -5,6 +5,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { WAYPOINT_TYPE } from '../const';
 import { DEFAULT_WAY_POINT, DEFAULT_DESTINATION} from '../const.js';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
+import { NAME_MOCK } from '../mock/const-mock';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -198,11 +199,14 @@ export default class FormEditView extends AbstractStatefulView {
 
   #eventDestinationHandler = (evt) => {
     evt.preventDefault();
-    if (evt.target.value !== '') {
-      this.updateElement({
-        destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,
-      });
+    evt.preventDefault();
+    if (!NAME_MOCK.includes(evt.target.value)) {
+      evt.target.value = NAME_MOCK[0];
     }
+
+    this.updateElement({
+      destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,
+    });
   };
 
   #eventTypeHandler = (event) => {
@@ -216,7 +220,7 @@ export default class FormEditView extends AbstractStatefulView {
   #eventPriceHandler = (evt) => {
     evt.preventDefault();
     this._setState({
-      basePrice: evt.target.value,
+      basePrice: Number(evt.target.value.replace(/[^\d.]/g, '')),
     });
   };
 
