@@ -2,8 +2,10 @@
 
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import { DEFAULT_WAY_POINT, WAYPOINT_TYPE_MOCK } from '../mock/const-mock.js';
+import { WAYPOINT_TYPE } from '../const';
+import { DEFAULT_WAY_POINT, DEFAULT_DESTINATION} from '../const.js';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
+import { NAME_MOCK } from '../mock/const-mock';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -11,13 +13,13 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
 
-  const destinationById = getDestination(waypoint.destination, allDestinations);
+  const destinationById = waypoint.destination ? getDestination(waypoint.destination, allDestinations) : DEFAULT_DESTINATION; // НАСКОЛЬКО КОРРЕКТНО БЫЛО ТАК ДЕЛАТЬ?
   const offersByType = getOffersByType(waypoint.type, allOffers);
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
   const dateTimeToReadble = humanizeDateTime(dateTo);
 
-  const createEventTypeListTemplate = () => (WAYPOINT_TYPE_MOCK.map((wayPointType) => {
+  const createEventTypeListTemplate = () => (WAYPOINT_TYPE.map((wayPointType) => {
     const checked = waypoint.type === wayPointType ? 'checked' : '';
     return `<div class="event__type-item">
       <input id="event-type-${wayPointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${wayPointType}" ${checked}>
@@ -197,11 +199,14 @@ export default class FormEditView extends AbstractStatefulView {
 
   #eventDestinationHandler = (evt) => {
     evt.preventDefault();
-    if (evt.target.value !== '') {
-      this.updateElement({
-        destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,
-      });
+    evt.preventDefault();
+    if (!NAME_MOCK.includes(evt.target.value)) {
+      evt.target.value = NAME_MOCK[0];
     }
+
+    this.updateElement({
+      destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,
+    });
   };
 
   #eventTypeHandler = (event) => {
@@ -215,7 +220,7 @@ export default class FormEditView extends AbstractStatefulView {
   #eventPriceHandler = (evt) => {
     evt.preventDefault();
     this._setState({
-      basePrice: evt.target.value,
+      basePrice: Number(evt.target.value.replace(/[^\d.]/g, '')),
     });
   };
 
@@ -243,6 +248,7 @@ export default class FormEditView extends AbstractStatefulView {
     this.setClickHandler(this._callback.click);
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
+    this.setDeleteClickHandler(this._callback.deleteClick);
   };
 
   #setDatepickerStart = () => {
@@ -292,4 +298,19 @@ export default class FormEditView extends AbstractStatefulView {
     this._callback.submit(FormEditView.parseStateToWaypoint(this._state));
   };
 
+  reset = (waypoint) => {
+    this.updateElement(
+      FormEditView.parseWaypointToState(waypoint),
+    );
+  };
+
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteClick(FormEditView.parseStateToWaypoint(this._state));
+  };
 }

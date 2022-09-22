@@ -1,12 +1,15 @@
 // @ts-nocheck
 
 import { humanizeDate, humanizeTime, robotDate, robotDateTime } from '../utils/utils.js';
+import { DEFAULT_DESTINATION} from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 
 const createWaypointTemplate = (waypoint, offers, destination) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
+
+  destination = destination ? destination : DEFAULT_DESTINATION; // НАСКОЛЬКО КОРРЕКТНО БЫЛО ТАК ДЕЛАТЬ?
 
   const dateFromReadble = humanizeDate(dateFrom);
   const timeFromReadble = humanizeTime(dateFrom);
