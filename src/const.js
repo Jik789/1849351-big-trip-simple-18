@@ -17,6 +17,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const FilterType = {
@@ -40,4 +41,6 @@ const DEFAULT_DESTINATION = {
   'name': '',
 };
 
-export {SortType, UserAction, UpdateType, FilterType, DEFAULT_WAY_POINT, WAYPOINT_TYPE, DEFAULT_DESTINATION};
+const UNIT_DATE = 'minute';
+
+export {SortType, UserAction, UpdateType, FilterType, DEFAULT_WAY_POINT, WAYPOINT_TYPE, DEFAULT_DESTINATION, UNIT_DATE};

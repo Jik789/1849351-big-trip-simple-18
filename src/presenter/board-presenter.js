@@ -4,6 +4,7 @@ import {render, RenderPosition, remove} from '../framework/render.js';
 import EventListView from '../view/event-list-view';
 import NoWaypointView from '../view/no-waypoint-view';
 import SortView from '../view/sort-view';
+import LoadingView from '../view/loading-view.js';
 import WaypointPresenter from './waypoint-presenter';
 import WaypointNewPresenter from './waypoint-new-presenter';
 import { sortWaypointDay, sortWaypointPrice } from '../utils/utils';
@@ -12,6 +13,7 @@ import { filter } from '../utils/filter.js';
 
 export default class BoardPresenter {
   #eventListComponent = new EventListView();
+  #loadingComponent = new LoadingView();
   #sortComponent = null;
   #noWaypointComponent = null;
 
@@ -23,6 +25,7 @@ export default class BoardPresenter {
   #waypointsModel = null;
   #filterModel = null;
   #filterType = FilterType.EVERYTHING;
+  #isLoading = true;
 
   constructor(parentContainer, waypointsModel, filterModel) {
     this.#parentContainer = parentContainer;
@@ -69,25 +72,27 @@ export default class BoardPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this.#waypointPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
         this.#clearBoard();
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
         this.#clearBoard({resetSortType: true});
         this.#renderBoard();
-        // - обновить всю доску (например, при переключении фильтра)
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
         break;
     }
   };
 
 
   #renderWayPoints = (wayPoint) => {
-    const waypointPresenter = new WaypointPresenter(this.#eventListComponent.element, this.#handleViewAction, this.#handleModeChange);
+    const waypointPresenter = new WaypointPresenter(this.#waypointsModel, this.#eventListComponent.element, this.#handleViewAction, this.#handleModeChange);
     waypointPresenter.init(wayPoint);
     this.#waypointPresenter.set(wayPoint.id, waypointPresenter);
   };
@@ -97,6 +102,11 @@ export default class BoardPresenter {
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
     render(this.#sortComponent, this.#parentContainer);
   };
+
+  #renderLoading = () => {
+    render(this.#loadingComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
+  };
+
 
   #renderNoWayPoints = () => {
     this.#noWaypointComponent = new NoWaypointView(this.#filterType);
@@ -123,6 +133,7 @@ export default class BoardPresenter {
     this.#waypointPresenter.clear();
 
     remove(this.#sortComponent);
+    remove(this.#loadingComponent);
 
     if (this.#noWaypointComponent) {
       remove(this.#noWaypointComponent);
@@ -134,12 +145,16 @@ export default class BoardPresenter {
   };
 
   #renderBoard = () => {
-    const waypoints = this.waypoints;
-    const waypointsCount = waypoints.length;
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
 
     this.#renderSort();
-
     render(this.#eventListComponent, this.#parentContainer);
+
+    const waypoints = this.waypoints;
+    const waypointsCount = waypoints.length;
     if (waypointsCount === 0) {
       this.#renderNoWayPoints();
       return;

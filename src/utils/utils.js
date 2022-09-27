@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { UNIT_DATE } from '../mock/const-mock';
+import { UNIT_DATE } from '../const';
 
 const humanizeDate = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('D MMMM');
 const humanizeTime = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('HH:mm');

@@ -2,7 +2,6 @@
 import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';
 import { render, replace, remove } from '../framework/render.js';
-import WaypointModel from '../model/waypoint-model';
 import { UserAction, UpdateType } from '../const.js';
 import { isDatesEqual } from '../utils/utils';
 
@@ -17,11 +16,13 @@ export default class WaypointPresenter {
   #waypointComponentEdit = null;
   #changeData = null;
   #changeMode = null;
+  #waypointsModel = null;
 
   #waypoint = null;
   #mode = Mode.DEFAULT;
 
-  constructor(waypointListContainer, changeData, changeMode) {
+  constructor(waypointsModel, waypointListContainer, changeData, changeMode) {
+    this.#waypointsModel = waypointsModel;
     this.#waypointListContainer = waypointListContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
@@ -29,22 +30,21 @@ export default class WaypointPresenter {
 
   init = (waypoint) => {
     this.#waypoint = waypoint;
-    this.waypointsModel = new WaypointModel();
-    this.waypoints = this.waypointsModel.waypoints;
+    this.waypoints = this.#waypointsModel.waypoints;
 
     const prevWaypointComponent = this.#waypointComponent;
     const prevWaypointComponentEdit = this.#waypointComponentEdit;
 
     this.#waypointComponent = new WaypointView(
       waypoint,
-      this.waypointsModel.getWaypointOffers(waypoint),
-      this.waypointsModel.getWaypointDestinations(waypoint)
+      this.#waypointsModel.getWaypointOffers(waypoint),
+      this.#waypointsModel.getWaypointDestinations(waypoint)
     );
 
     this.#waypointComponentEdit = new FormEditView(
       waypoint,
-      this.waypointsModel.allOffers,
-      this.waypointsModel.allDestinations
+      this.#waypointsModel.allOffers,
+      this.#waypointsModel.allDestinations
     );
 
     this.#waypointComponent.setClickHandler(this.#setClickCardToForm);

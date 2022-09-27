@@ -1,18 +1,21 @@
 // @ts-nocheck
-import { WAYPOINT_COUNT } from '../mock/const-mock';
-import { destinationMock } from '../mock/destination-mock';
-import { offerMock } from '../mock/offer-mock';
-import { waypointMock } from '../mock/waypoint-mock';
 import { getDestination, getOffersByType } from '../utils/utils';
 import Observable from '../framework/observable.js';
+import {UpdateType} from '../const.js';
 
 export default class WaypointModel extends Observable {
-  #wayPoints = Array.from({length: WAYPOINT_COUNT}, (_value, index) => waypointMock(index + 1));
-  #allDestinations = destinationMock();
-  #allOffers = offerMock();
+  #waypointsApiService = null;
+  #waypoints = [];
+  #allDestinations = [];
+  #allOffers = [];
+
+  constructor(waypointsApiService) {
+    super();
+    this.#waypointsApiService = waypointsApiService;
+  }
 
   get waypoints() {
-    return this.#wayPoints;
+    return this.#waypoints;
   }
 
   get allDestinations() {
@@ -23,44 +26,81 @@ export default class WaypointModel extends Observable {
     return this.#allOffers;
   }
 
-  updateTask = (updateType, update) => {
-    const index = this.#wayPoints.findIndex((task) => task.id === update.id);
+  init = async () => {
+    try { // КАК ПРАВИЛЬНО ТУТ ОБРАБОТАТЬ ОШИБОЧКУ???
+      const waypoints = await this.#waypointsApiService.waypoints;
+      const allDestinations = await this.#waypointsApiService.allDestinations;
+      const allOffers = await this.#waypointsApiService.allOffers;
+
+      this.#waypoints = waypoints.map(this.#adaptToClient);
+      this.#allDestinations = allDestinations;
+      this.#allOffers = allOffers;
+
+    } catch(err) {
+      this.#waypoints = [];
+      this.#allDestinations = [];
+      this.#allOffers = [];
+    }
+    this._notify(UpdateType.INIT);
+  };
+
+  updateTask = async (updateType, update) => {
+    const index = this.#waypoints.findIndex((task) => task.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t update unexisting task');
     }
 
-    this.#wayPoints = [
-      ...this.#wayPoints.slice(0, index),
-      update,
-      ...this.#wayPoints.slice(index + 1),
-    ];
-
-    this._notify(updateType, update);
+    try {
+      const response = await this.#waypointsApiService.updateWaypoints(update);
+      const updatedWaypoint = this.#adaptToClient(response);
+      this.#waypoints = [
+        ...this.#waypoints.slice(0, index),
+        updatedWaypoint,
+        ...this.#waypoints.slice(index + 1),
+      ];
+      this._notify(updateType, updatedWaypoint);
+    } catch(err) {
+      throw new Error('Can\'t update task');
+    }
   };
 
   addTask = (updateType, update) => {
-    this.#wayPoints = [
+    this.#waypoints = [
       update,
-      ...this.#wayPoints,
+      ...this.#waypoints,
     ];
 
     this._notify(updateType, update);
   };
 
   deleteTask = (updateType, update) => {
-    const index = this.#wayPoints.findIndex((task) => task.id === update.id);
+    const index = this.#waypoints.findIndex((task) => task.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t delete unexisting task');
     }
 
-    this.#wayPoints = [
-      ...this.#wayPoints.slice(0, index),
-      ...this.#wayPoints.slice(index + 1),
+    this.#waypoints = [
+      ...this.#waypoints.slice(0, index),
+      ...this.#waypoints.slice(index + 1),
     ];
 
     this._notify(updateType);
+  };
+
+  #adaptToClient = (waypoint) => {
+    const adaptedWaypoint = {...waypoint,
+      dateFrom: waypoint['date_from'] !== null ? new Date(waypoint['date_from']) : waypoint['date_from'],
+      dateTo: waypoint['date_to'] !== null ? new Date(waypoint['date_to']) : waypoint['date_to'],
+      basePrice: waypoint['base_price'],
+    };
+
+    delete adaptedWaypoint['base_price'];
+    delete adaptedWaypoint['date_from'];
+    delete adaptedWaypoint['date_to'];
+
+    return adaptedWaypoint;
   };
 
   getWaypointDestinations = (wayPoint) => getDestination(wayPoint.destination, this.#allDestinations);
