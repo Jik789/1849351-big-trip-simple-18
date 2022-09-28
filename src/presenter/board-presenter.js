@@ -131,7 +131,7 @@ export default class BoardPresenter {
   };
 
   #renderLoading = () => {
-    render(this.#loadingComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#loadingComponent, this.#parentContainer, RenderPosition.AFTERBEGIN);
   };
 
 
