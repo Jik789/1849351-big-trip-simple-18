@@ -2,7 +2,6 @@
 
 import {remove, render, RenderPosition} from '../framework/render.js';
 import FormAddView from '../view/form-add-view';
-import {nanoid} from 'nanoid';
 import {UserAction, UpdateType} from '../const.js';
 import { DEFAULT_WAY_POINT } from '../const.js';
 
@@ -56,7 +55,7 @@ export default class WaypointNewPresenter {
     this.#changeData(
       UserAction.ADD_TASK,
       UpdateType.MINOR,
-      {...waypoint, id: nanoid()},
+      waypoint,
     );
     this.destroy();
   };

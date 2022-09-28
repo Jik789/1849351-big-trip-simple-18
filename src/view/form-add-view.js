@@ -181,12 +181,8 @@ export default class FormAddView extends AbstractStatefulView {
     }
   };
 
-  #eventDestinationHandler = (evt) => { // НЕМНОГО КОСТЫЛЬНЫЙ МЕТОД, НО ЗАДАНИЕ БЫЛО НЕ ОЧЕНЬ ПОНЯТНО
+  #eventDestinationHandler = (evt) => { // ИСПРАВИТЬ АВТОЗАПОЛНЕНИЕ ВОТ ТУТ
     evt.preventDefault();
-    if (!NAME_MOCK.includes(evt.target.value)) {
-      evt.target.value = NAME_MOCK[0];
-    }
-
     this.updateElement({
       destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,
     });

@@ -155,12 +155,13 @@ export default class FormEditView extends AbstractStatefulView {
   }
 
   static parseWaypointToState = (waypoint) => ({
-    ...waypoint
+    ...waypoint,
   });
 
-  static parseStateToWaypoint = (state) => ({
-    ...state
-  });
+  static parseStateToWaypoint = (state) => {
+    const waypoint = {...state};
+    return waypoint;
+  };
 
   #setInnerHandlers = () => {
     Array.from(this.element.querySelectorAll('.event__type-input')).forEach((typeElement) => typeElement.addEventListener('click', this.#eventTypeHandler));
@@ -169,8 +170,6 @@ export default class FormEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#eventDestinationHandler);
   };
 
-  // Перегружаем метод родителя removeElement,
-  // чтобы при удалении удалялся более не нужный календарь
   removeElement = () => {
     super.removeElement();
 
