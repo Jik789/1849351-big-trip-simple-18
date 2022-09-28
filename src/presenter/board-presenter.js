@@ -58,12 +58,15 @@ export default class BoardPresenter {
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_TASK:
+        this.#waypointPresenter.get(update.id).setSaving();
         this.#waypointsModel.updateTask(updateType, update);
         break;
       case UserAction.ADD_TASK:
+        this.#waypointNewPresenter.setSaving();
         this.#waypointsModel.addTask(updateType, update);
         break;
       case UserAction.DELETE_TASK:
+        this.#waypointPresenter.get(update.id).setDeleting();
         this.#waypointsModel.deleteTask(updateType, update);
         break;
     }
@@ -152,6 +155,7 @@ export default class BoardPresenter {
 
     this.#renderSort();
     render(this.#eventListComponent, this.#parentContainer);
+
 
     const waypoints = this.waypoints;
     const waypointsCount = waypoints.length;

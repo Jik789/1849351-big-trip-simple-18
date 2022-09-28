@@ -5,7 +5,6 @@ import { WAYPOINT_TYPE, DEFAULT_DESTINATION } from '../const';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import { NAME_MOCK } from '../mock/const-mock';
 
 const createFormAddTemplate = (waypoint, allDestinations, allOffers) => {
   const dateFrom = waypoint.dateFrom;
@@ -110,21 +109,20 @@ const createFormAddTemplate = (waypoint, allDestinations, allOffers) => {
     <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${waypoint.basePrice}">
   </div>
 
-  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-  <button class="event__reset-btn" type="reset">Delete</button>
+  <button class="event__save-btn  btn  btn--blue" type="submit" ${waypoint.isDisabled ? 'disabled' : ''}>${waypoint.isSaving ? 'Saving...' : 'Save'}</button>
+  <button class="event__reset-btn" type="reset" ${waypoint.isDisabled ? 'disabled' : ''}>Cancel</button>
   <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
 <section class="event__details">
   <section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
+    ${offersByType.length ? '<h3 class="event__section-title  event__section-title--offers">Offers</h3>' : ''}
     <div class="event__available-offers">
       ${createOffersByTypeTemplate()}
     </div>
   </section>
-  ${createDestinationsContainerTemplate()}
+  ${destinationById ? createDestinationsContainerTemplate() : ''}
 </section>
 </form>
 </li>

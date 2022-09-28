@@ -38,6 +38,13 @@ export default class WaypointNewPresenter {
     document.addEventListener('keydown', this.#escKeyDownHandler);
   };
 
+  setSaving = () => {
+    this.#waypointNewComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  };
+
   destroy = () => {
     if (this.#waypointNewComponent === null) {
       return;
@@ -57,7 +64,6 @@ export default class WaypointNewPresenter {
       UpdateType.MINOR,
       waypoint,
     );
-    this.destroy();
   };
 
   #handleDeleteClick = () => {
