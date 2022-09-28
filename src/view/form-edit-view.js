@@ -5,7 +5,6 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { WAYPOINT_TYPE } from '../const';
 import { DEFAULT_WAY_POINT, DEFAULT_DESTINATION} from '../const.js';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
-import { NAME_MOCK } from '../mock/const-mock';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -45,26 +44,9 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
     `<option value="${destinationItem.name}"></option>`
   )).join(''));
 
-  const createPhotosTemplate = (pictures) => (pictures.map((picture) => (
-    `<img class="event__photo" src="${picture.src}" alt="Event photo">`
-  )).join(''));
-
-  const createPhotosContainerTemplate = () => {
-    if ('pictures' in destinationById) {
-      return `<div class="event__photos-container">
-      <div class="event__photos-tape">
-       ${createPhotosTemplate(destinationById.pictures)}
-      </div>
-    </div>`;
-    } else {
-      return '';
-    }
-  };
-
   const createDestinationsContainerTemplate = () => `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${destinationById.description}</p>
-      ${createPhotosContainerTemplate()}
     </section>`;
 
   return (`
@@ -112,21 +94,20 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
     <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${waypoint.basePrice}">
   </div>
 
-  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-  <button class="event__reset-btn" type="reset">Delete</button>
+  <button class="event__save-btn  btn  btn--blue" type="submit" ${waypoint.isDisabled ? 'disabled' : ''}>${waypoint.isSaving ? 'Saving...' : 'Save'}</button>
+  <button class="event__reset-btn" type="reset" ${waypoint.isDisabled ? 'disabled' : ''}>${waypoint.isDeleting ? 'Deleting...' : 'Delete'}</button>
   <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
 <section class="event__details">
   <section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
+    ${offersByType.length ? '<h3 class="event__section-title  event__section-title--offers">Offers</h3>' : ''}
     <div class="event__available-offers">
       ${createOffersByTypeTemplate()}
     </div>
   </section>
-  ${createDestinationsContainerTemplate()}
+  ${destinationById ? createDestinationsContainerTemplate() : ''}
 </section>
 </form>
 </li>
@@ -155,12 +136,20 @@ export default class FormEditView extends AbstractStatefulView {
   }
 
   static parseWaypointToState = (waypoint) => ({
-    ...waypoint
+    ...waypoint,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
   });
 
-  static parseStateToWaypoint = (state) => ({
-    ...state
-  });
+  static parseStateToWaypoint = (state) => {
+    const waypoint = {...state};
+
+    delete waypoint.isDisabled;
+    delete waypoint.isSaving;
+    delete waypoint.isDeleting;
+    return waypoint;
+  };
 
   #setInnerHandlers = () => {
     Array.from(this.element.querySelectorAll('.event__type-input')).forEach((typeElement) => typeElement.addEventListener('click', this.#eventTypeHandler));
@@ -169,8 +158,6 @@ export default class FormEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#eventDestinationHandler);
   };
 
-  // Перегружаем метод родителя removeElement,
-  // чтобы при удалении удалялся более не нужный календарь
   removeElement = () => {
     super.removeElement();
 
@@ -199,10 +186,6 @@ export default class FormEditView extends AbstractStatefulView {
 
   #eventDestinationHandler = (evt) => {
     evt.preventDefault();
-    evt.preventDefault();
-    if (!NAME_MOCK.includes(evt.target.value)) {
-      evt.target.value = NAME_MOCK[0];
-    }
 
     this.updateElement({
       destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,

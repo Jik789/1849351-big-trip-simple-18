@@ -10,6 +10,12 @@ import WaypointNewPresenter from './waypoint-new-presenter';
 import { sortWaypointDay, sortWaypointPrice } from '../utils/utils';
 import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 import { filter } from '../utils/filter.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class BoardPresenter {
   #eventListComponent = new EventListView();
@@ -26,6 +32,8 @@ export default class BoardPresenter {
   #filterModel = null;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
+
+  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
   constructor(parentContainer, waypointsModel, filterModel) {
     this.#parentContainer = parentContainer;
@@ -55,18 +63,37 @@ export default class BoardPresenter {
     return filteredTasks;
   }
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_TASK:
-        this.#waypointsModel.updateTask(updateType, update);
+        this.#waypointPresenter.get(update.id).setSaving();
+        try {
+          await this.#waypointsModel.updateTask(updateType, update);
+        } catch(err) {
+          this.#waypointPresenter.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_TASK:
-        this.#waypointsModel.addTask(updateType, update);
+        this.#waypointNewPresenter.setSaving();
+        try {
+          await this.#waypointsModel.addTask(updateType, update);
+        } catch(err) {
+          this.#waypointNewPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_TASK:
-        this.#waypointsModel.deleteTask(updateType, update);
+        this.#waypointPresenter.get(update.id).setDeleting();
+        try {
+          await this.#waypointsModel.deleteTask(updateType, update);
+        } catch(err) {
+          this.#waypointPresenter.get(update.id).setAborting();
+        }
         break;
     }
+
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -104,7 +131,7 @@ export default class BoardPresenter {
   };
 
   #renderLoading = () => {
-    render(this.#loadingComponent, this.#eventListComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#loadingComponent, this.#parentContainer, RenderPosition.AFTERBEGIN);
   };
 
 
@@ -152,6 +179,7 @@ export default class BoardPresenter {
 
     this.#renderSort();
     render(this.#eventListComponent, this.#parentContainer);
+
 
     const waypoints = this.waypoints;
     const waypointsCount = waypoints.length;

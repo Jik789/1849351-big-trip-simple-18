@@ -52,7 +52,7 @@ export default class WaypointModel extends Observable {
     }
 
     try {
-      const response = await this.#waypointsApiService.updateWaypoints(update);
+      const response = await this.#waypointsApiService.updateWaypoint(update);
       const updatedWaypoint = this.#adaptToClient(response);
       this.#waypoints = [
         ...this.#waypoints.slice(0, index),
@@ -65,28 +65,34 @@ export default class WaypointModel extends Observable {
     }
   };
 
-  addTask = (updateType, update) => {
-    this.#waypoints = [
-      update,
-      ...this.#waypoints,
-    ];
-
-    this._notify(updateType, update);
+  addTask = async (updateType, update) => {
+    try {
+      const response = await this.#waypointsApiService.addWaypoint(update);
+      const newWaypoint = this.#adaptToClient(response);
+      this.#waypoints = [newWaypoint, ...this.#waypoints];
+      this._notify(updateType, newWaypoint);
+    } catch(err) {
+      throw new Error('Can\'t add waypoint');
+    }
   };
 
-  deleteTask = (updateType, update) => {
-    const index = this.#waypoints.findIndex((task) => task.id === update.id);
+  deleteTask = async (updateType, update) => {
+    const index = this.#waypoints.findIndex((waypoint) => waypoint.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t delete unexisting task');
     }
 
-    this.#waypoints = [
-      ...this.#waypoints.slice(0, index),
-      ...this.#waypoints.slice(index + 1),
-    ];
-
-    this._notify(updateType);
+    try {
+      await this.#waypointsApiService.deleteWaypoint(update);
+      this.#waypoints = [
+        ...this.#waypoints.slice(0, index),
+        ...this.#waypoints.slice(index + 1),
+      ];
+      this._notify(updateType);
+    } catch(err) {
+      throw new Error('Can\'t delete task');
+    }
   };
 
   #adaptToClient = (waypoint) => {
