@@ -150,4 +150,21 @@ export default class WaypointPresenter {
       waypoint,
     );
   };
+
+  setAborting = () => {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#waypointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#waypointComponentEdit.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#waypointComponentEdit.shake(resetFormState);
+  };
 }

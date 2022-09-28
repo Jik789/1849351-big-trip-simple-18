@@ -5,7 +5,6 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { WAYPOINT_TYPE } from '../const';
 import { DEFAULT_WAY_POINT, DEFAULT_DESTINATION} from '../const.js';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
-import { NAME_MOCK } from '../mock/const-mock';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 

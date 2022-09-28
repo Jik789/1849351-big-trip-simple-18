@@ -76,4 +76,16 @@ export default class WaypointNewPresenter {
       this.destroy();
     }
   };
+
+  setAborting = () => {
+    const resetFormState = () => {
+      this.#waypointNewComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#waypointNewComponent.shake(resetFormState);
+  };
 }

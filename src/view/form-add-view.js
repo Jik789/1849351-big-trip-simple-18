@@ -111,7 +111,6 @@ const createFormAddTemplate = (waypoint, allDestinations, allOffers) => {
 
   <button class="event__save-btn  btn  btn--blue" type="submit" ${waypoint.isDisabled ? 'disabled' : ''}>${waypoint.isSaving ? 'Saving...' : 'Save'}</button>
   <button class="event__reset-btn" type="reset" ${waypoint.isDisabled ? 'disabled' : ''}>Cancel</button>
-  <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
@@ -122,7 +121,7 @@ const createFormAddTemplate = (waypoint, allDestinations, allOffers) => {
       ${createOffersByTypeTemplate()}
     </div>
   </section>
-  ${destinationById ? createDestinationsContainerTemplate() : ''}
+  ${destinationById.description ? createDestinationsContainerTemplate() : ''}
 </section>
 </form>
 </li>
