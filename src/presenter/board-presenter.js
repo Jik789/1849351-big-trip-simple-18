@@ -180,7 +180,6 @@ export default class BoardPresenter {
     this.#renderSort();
     render(this.#eventListComponent, this.#parentContainer);
 
-
     const waypoints = this.waypoints;
     const waypointsCount = waypoints.length;
     if (waypointsCount === 0) {
