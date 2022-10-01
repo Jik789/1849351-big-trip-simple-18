@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { getDestination, getOffersByType } from '../utils/utils';
 import Observable from '../framework/observable.js';
 import {UpdateType} from '../const.js';
@@ -27,7 +26,7 @@ export default class WaypointModel extends Observable {
   }
 
   init = async () => {
-    try { // КАК ПРАВИЛЬНО ТУТ ОБРАБОТАТЬ ОШИБОЧКУ???
+    try {
       const waypoints = await this.#waypointsApiService.waypoints;
       const allDestinations = await this.#waypointsApiService.allDestinations;
       const allOffers = await this.#waypointsApiService.allOffers;
@@ -44,11 +43,11 @@ export default class WaypointModel extends Observable {
     this._notify(UpdateType.INIT);
   };
 
-  updateTask = async (updateType, update) => {
-    const index = this.#waypoints.findIndex((task) => task.id === update.id);
+  updateWaypoint = async (updateType, update) => {
+    const index = this.#waypoints.findIndex((waypoint) => waypoint.id === update.id);
 
     if (index === -1) {
-      throw new Error('Can\'t update unexisting task');
+      throw new Error('Can\'t update unexisting waypoint');
     }
 
     try {
@@ -61,11 +60,11 @@ export default class WaypointModel extends Observable {
       ];
       this._notify(updateType, updatedWaypoint);
     } catch(err) {
-      throw new Error('Can\'t update task');
+      throw new Error('Can\'t update waypoint');
     }
   };
 
-  addTask = async (updateType, update) => {
+  addWaypoint = async (updateType, update) => {
     try {
       const response = await this.#waypointsApiService.addWaypoint(update);
       const newWaypoint = this.#adaptToClient(response);
@@ -76,11 +75,11 @@ export default class WaypointModel extends Observable {
     }
   };
 
-  deleteTask = async (updateType, update) => {
+  deleteWaypoint = async (updateType, update) => {
     const index = this.#waypoints.findIndex((waypoint) => waypoint.id === update.id);
 
     if (index === -1) {
-      throw new Error('Can\'t delete unexisting task');
+      throw new Error('Can\'t delete unexisting waypoint');
     }
 
     try {

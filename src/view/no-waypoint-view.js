@@ -1,4 +1,3 @@
-// @ts-nocheck
 import AbstractView from '../framework/view/abstract-view.js';
 import {FilterType} from '../const';
 

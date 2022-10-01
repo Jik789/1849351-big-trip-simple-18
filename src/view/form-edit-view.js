@@ -1,9 +1,7 @@
-// @ts-nocheck
-
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { WAYPOINT_TYPE } from '../const';
-import { DEFAULT_WAY_POINT, DEFAULT_DESTINATION} from '../const.js';
+import { DEFAULT_WAY_POINT} from '../const.js';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -11,8 +9,9 @@ import 'flatpickr/dist/flatpickr.min.css';
 const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
+  const DEFAULT_DESTINATION = allDestinations[0];
 
-  const destinationById = waypoint.destination ? getDestination(waypoint.destination, allDestinations) : DEFAULT_DESTINATION; // НАСКОЛЬКО КОРРЕКТНО БЫЛО ТАК ДЕЛАТЬ?
+  const destinationById = waypoint.destination ? getDestination(waypoint.destination, allDestinations) : DEFAULT_DESTINATION;
   const offersByType = getOffersByType(waypoint.type, allOffers);
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);

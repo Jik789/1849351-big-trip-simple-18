@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {remove, render, RenderPosition} from '../framework/render.js';
 import FormAddView from '../view/form-add-view';
 import {UserAction, UpdateType} from '../const.js';
