@@ -255,7 +255,6 @@ export default class FormAddView extends AbstractStatefulView {
         enableTime: true,
         'time_24hr': true,
         dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
         onChange: this.#eventDateEndHandler,
       },

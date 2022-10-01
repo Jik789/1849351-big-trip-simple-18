@@ -179,7 +179,7 @@ export default class FormEditView extends AbstractStatefulView {
 
   #eventTimeEndHandler = ([userDate]) => {
     this._setState({
-      dateTo: [userDate],
+      dateTo: userDate,
     });
   };
 
@@ -253,7 +253,6 @@ export default class FormEditView extends AbstractStatefulView {
         enableTime: true,
         'time_24hr': true,
         dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
         onClose: this.#eventTimeEndHandler,
       },
