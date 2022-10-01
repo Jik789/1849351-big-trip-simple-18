@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import FilterPresenter from './presenter/filter-presenter.js';
 import BoardPresenter from './presenter/board-presenter';
 import WaypointModel from './model/waypoint-model.js';

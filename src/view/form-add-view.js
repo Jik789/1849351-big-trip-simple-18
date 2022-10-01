@@ -1,7 +1,6 @@
-// @ts-nocheck
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import { WAYPOINT_TYPE, DEFAULT_DESTINATION } from '../const';
+import { WAYPOINT_TYPE } from '../const';
 import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -9,6 +8,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 const createFormAddTemplate = (waypoint, allDestinations, allOffers) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
+  const DEFAULT_DESTINATION = allDestinations[0];
 
   const destinationById = waypoint.destination !== null ? getDestination(waypoint.destination, allDestinations) : DEFAULT_DESTINATION;
   const offersByType = getOffersByType(waypoint.type, allOffers);
@@ -178,11 +178,20 @@ export default class FormAddView extends AbstractStatefulView {
     }
   };
 
-  #eventDestinationHandler = (evt) => { // ИСПРАВИТЬ АВТОЗАПОЛНЕНИЕ ВОТ ТУТ
+  #eventDestinationHandler = (evt) => {
     evt.preventDefault();
-    this.updateElement({
-      destination: this.#allDestinations.find((destination) => evt.target.value === destination.name).id,
-    });
+    const DEFAULT_DESTINATION = this.#allDestinations[0];
+    const targetDestanation = this.#allDestinations.find((destination) => evt.target.value === destination.name);
+
+    if (this.#allDestinations.includes(targetDestanation)) {
+      this.updateElement({
+        destination: targetDestanation.id
+      });
+    } else {
+      this.updateElement({
+        destination: DEFAULT_DESTINATION.id
+      });
+    }
   };
 
   #eventTypeHandler = (event) => {
@@ -246,7 +255,6 @@ export default class FormAddView extends AbstractStatefulView {
         enableTime: true,
         'time_24hr': true,
         dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
         onChange: this.#eventDateEndHandler,
       },

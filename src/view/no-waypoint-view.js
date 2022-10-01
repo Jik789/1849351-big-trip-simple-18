@@ -1,10 +1,9 @@
-// @ts-nocheck
 import AbstractView from '../framework/view/abstract-view.js';
 import {FilterType} from '../const';
 
 const NoWaypointTextType = {
-  [FilterType.EVERYTHING]: 'ВАЩЕ НЕТ ТАСКОВ',
-  [FilterType.FUTURE]: 'НЕТ ТАСКОВ ПО ФИЛЬТРУ',
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
 };
 
 const createNoWaypointTemplate = (filterType) => {

@@ -27,20 +27,14 @@ const FilterType = {
 
 const DEFAULT_WAY_POINT = {
   id: nanoid(),
-  basePrice: 0,
-  dateFrom: null,
-  dateTo: null,
-  destination: null,
+  basePrice: 100,
+  dateFrom: new Date,
+  dateTo: new Date,
+  destination: 1,
   offers: [],
   type: WAYPOINT_TYPE[0],
 };
 
-const DEFAULT_DESTINATION = {
-  'id': nanoid(),
-  'description': '',
-  'name': '',
-};
-
 const UNIT_DATE = 'minute';
 
-export {SortType, UserAction, UpdateType, FilterType, DEFAULT_WAY_POINT, WAYPOINT_TYPE, DEFAULT_DESTINATION, UNIT_DATE};
+export {SortType, UserAction, UpdateType, FilterType, DEFAULT_WAY_POINT, WAYPOINT_TYPE, UNIT_DATE};

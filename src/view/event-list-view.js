@@ -1,4 +1,3 @@
-// @ts-nocheck
 import AbstractView from '../framework/view/abstract-view.js';
 
 const createEventListTemplate = () => `<ul class="trip-events__list">

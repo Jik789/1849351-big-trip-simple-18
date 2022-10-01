@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {render, replace, remove} from '../framework/render.js';
 import FilterView from '../view/filter-view.js';
 import {filter} from '../utils/filter.js';

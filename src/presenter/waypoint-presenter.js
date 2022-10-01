@@ -1,4 +1,3 @@
-// @ts-nocheck
 import FormEditView from '../view/form-edit-view';
 import WaypointView from '../view/waypoint-view';
 import { render, replace, remove } from '../framework/render.js';
@@ -17,8 +16,8 @@ export default class WaypointPresenter {
   #changeData = null;
   #changeMode = null;
   #waypointsModel = null;
-
   #waypoint = null;
+
   #mode = Mode.DEFAULT;
 
   constructor(waypointsModel, waypointListContainer, changeData, changeMode) {
