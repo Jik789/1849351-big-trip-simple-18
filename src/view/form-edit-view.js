@@ -41,7 +41,7 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   ).join(''));
 
   const createDestinationOptionsTemplate = () => (allDestinations.map((destinationItem) => (
-    `<option value="${he(destinationItem.name)}"></option>`
+    `<option value="${destinationItem.name}"></option>`
   )).join(''));
 
   const createDestinationsContainerTemplate = () => `<section class="event__section  event__section--destination">

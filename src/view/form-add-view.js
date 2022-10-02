@@ -40,7 +40,7 @@ const createFormAddTemplate = (waypoint, allDestinations, allOffers) => {
   ).join(''));
 
   const createDestinationOptionsTemplate = () => (allDestinations.map((destinationItem) => (
-    `<option value="${he(destinationItem.name)}"></option>`
+    `<option value="${destinationItem.name}"></option>`
   )).join(''));
 
   const createPhotosTemplate = (pictures) => (pictures.map((picture) => (
