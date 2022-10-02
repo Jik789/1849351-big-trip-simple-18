@@ -3,9 +3,7 @@ import BoardPresenter from './presenter/board-presenter';
 import WaypointModel from './model/waypoint-model.js';
 import FilterModel from './model/filter-model.js';
 import WaypointsApiService from './waypoints-api-service';
-
-const AUTHORIZATION = 'Basic jewelhuxJik789';
-const END_POINT = 'https://18.ecmascript.pages.academy/big-trip/';
+import { AUTHORIZATION, END_POINT } from './const';
 
 const siteFilterElement = document.querySelector('.trip-controls__filters');
 const siteTripEventElement = document.querySelector('.trip-events');

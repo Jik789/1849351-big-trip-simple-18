@@ -7,10 +7,6 @@ const humanizeDateTime = (dueDate) => dueDate === null ? '' : dayjs(dueDate).for
 const robotDate = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('YYYY-MM-DD');
 const robotDateTime = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('YYYY-MM-DDTHH:mm');
 
-
-const getRandomNumberOfRange = (min,max) => Math.floor(Math.random() * ((max + 1) - min) + min);
-const getRandomValue = (items) => items[getRandomNumberOfRange(0, items.length - 1)];
-
 const toUpperCaseFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
 const getObjectIndexInArray = (arr) => {
@@ -49,6 +45,6 @@ const getOffersByType = (typeOffer, allOffers) => allOffers.find((offer) => offe
 
 const isFutureDate = (dateStart, dateEnd) => dayjs().isBefore(dayjs(dateStart), UNIT_DATE) || dayjs().isBefore(dayjs(dateEnd), UNIT_DATE);
 
-export {humanizeDate, getRandomNumberOfRange, getRandomValue , humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, getObjectIndexInArray, getDestination, getOffersByType, isDatesEqual, isFutureDate};
+export {humanizeDate, humanizeTime, robotDate, robotDateTime, humanizeDateTime, updateItem, sortWaypointDay, sortWaypointPrice, toUpperCaseFirstLetter, getObjectIndexInArray, getDestination, getOffersByType, isDatesEqual, isFutureDate};
 
 

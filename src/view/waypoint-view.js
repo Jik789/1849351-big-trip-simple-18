@@ -6,9 +6,9 @@ const createWaypointTemplate = (waypoint, offers, destination) => {
   const dateFrom = waypoint.dateFrom;
   const dateTo = waypoint.dateTo;
 
-  const dateFromReadble = humanizeDate(dateFrom);
-  const timeFromReadble = humanizeTime(dateFrom);
-  const timeToReadble = humanizeTime(dateTo);
+  const dateFromReadable = humanizeDate(dateFrom);
+  const timeFromReadable = humanizeTime(dateFrom);
+  const timeToReadable = humanizeTime(dateTo);
 
   const robotDateFrom = robotDate(dateFrom);
 
@@ -32,16 +32,16 @@ const createWaypointTemplate = (waypoint, offers, destination) => {
   return (`
   <li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="${robotDateFrom}">${dateFromReadble}</time>
+    <time class="event__date" datetime="${robotDateFrom}">${dateFromReadable}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${waypoint.type}.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${waypoint.type} ${destination.name}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="${robotDateTimeFrom}">${timeFromReadble}</time>
+        <time class="event__start-time" datetime="${robotDateTimeFrom}">${timeFromReadable}</time>
         &mdash;
-        <time class="event__end-time" datetime="${robotDateTimeTo}">${timeToReadble}</time>
+        <time class="event__end-time" datetime="${robotDateTimeTo}">${timeToReadable}</time>
       </p>
     </div>
     <p class="event__price">

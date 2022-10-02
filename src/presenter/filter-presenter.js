@@ -21,19 +21,18 @@ export default class FilterPresenter {
 
   get filters() {
     const tasks = this.#tasksModel.waypoints;
+    const FILTER_TYPE_EVERYTHING = {
+      type: FilterType.EVERYTHING,
+      name: 'everything',
+      count: filter[FilterType.EVERYTHING](tasks).length,
+    };
+    const FILTER_TYPE_FUTURE = {
+      type: FilterType.FUTURE,
+      name: 'future',
+      count: filter[FilterType.FUTURE](tasks).length,
+    };
 
-    return [
-      {
-        type: FilterType.EVERYTHING,
-        name: 'everything',
-        count: filter[FilterType.EVERYTHING](tasks).length,
-      },
-      {
-        type: FilterType.FUTURE,
-        name: 'future',
-        count: filter[FilterType.FUTURE](tasks).length,
-      },
-    ];
+    return [FILTER_TYPE_EVERYTHING, FILTER_TYPE_FUTURE];
   }
 
   init = () => {
