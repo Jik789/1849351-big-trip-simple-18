@@ -28,9 +28,9 @@ const createFormAddTemplate = (waypoint, allDestinations, allOffers) => {
        ${createPhotosTemplate(destinationById.pictures)}
       </div>
     </div>`;
-    } else {
-      return '';
     }
+
+    return '';
   };
 
   const createDestinationsContainerTemplate = () => `<section class="event__section  event__section--destination">
@@ -124,14 +124,6 @@ export default class FormAddView extends AbstractStatefulView {
     return createFormAddTemplate(this._state, this.#allDestinations, this.#allOffers);
   }
 
-  static parseWaypointToState = (waypoint) => ({
-    ...waypoint
-  });
-
-  static parseStateToWaypoint = (state) => ({
-    ...state
-  });
-
   #setInnerHandlers = () => {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#eventTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#eventDestinationHandler);
@@ -158,15 +150,11 @@ export default class FormAddView extends AbstractStatefulView {
     const DEFAULT_DESTINATION = this.#allDestinations[0];
     const targetDestanation = this.#allDestinations.find((destination) => evt.target.value === destination.name);
 
-    if (this.#allDestinations.includes(targetDestanation)) {
-      this.updateElement({
-        destination: targetDestanation.id
-      });
-    } else {
-      this.updateElement({
-        destination: DEFAULT_DESTINATION.id
-      });
-    }
+    this.updateElement({
+      destination: this.#allDestinations.includes(targetDestanation)
+        ? targetDestanation.id
+        : DEFAULT_DESTINATION.id
+    });
   };
 
   #eventTypeHandler = (event) => {
@@ -273,4 +261,12 @@ export default class FormAddView extends AbstractStatefulView {
       FormAddView.parseWaypointToState(waypoint),
     );
   };
+
+  static parseWaypointToState = (waypoint) => ({
+    ...waypoint
+  });
+
+  static parseStateToWaypoint = (state) => ({
+    ...state
+  });
 }

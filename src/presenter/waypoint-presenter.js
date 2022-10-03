@@ -70,6 +70,7 @@ export default class WaypointPresenter {
   };
 
   setSaving = () => {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
     if (this.#mode === Mode.EDITING) {
       this.#waypointComponentEdit.updateElement({
         isDisabled: true,
@@ -99,41 +100,41 @@ export default class WaypointPresenter {
     }
   };
 
-  #onEscKeyDown = (event) => {
-    if (event.key === 'Escape' || event.key === 'Esc') {
+  #escKeyDownHandler = (event) => {
+    if (event.key === 'Escape') {
       event.preventDefault();
       this.#waypointComponentEdit.reset(this.#waypoint);
       this.#replaceFormToCard();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
+      document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
 
   #replaceCardToForm = () => {
     replace(this.#waypointComponentEdit, this.#waypointComponent);
-    document.addEventListener('keydown', this.#onEscKeyDown);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#changeMode();
     this.#mode = Mode.EDITING;
   };
 
   #replaceFormToCard = () => {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
     replace(this.#waypointComponent, this.#waypointComponentEdit);
-    document.removeEventListener('keydown', this.#onEscKeyDown);
     this.#mode = Mode.DEFAULT;
   };
 
   #setClickCardToForm = () => {
     this.#replaceCardToForm();
-    document.addEventListener('keydown', this.#onEscKeyDown);
   };
 
   #setClickFormToCard = () => {
     this.#waypointComponentEdit.reset(this.#waypoint);
     this.#replaceFormToCard();
-    document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 
   #setSubmitHandler = (update) => {
-    const isMinorUpdate = !isDatesEqual(this.#waypoint.dueDate, update.dueDate);
+    const isMinorUpdate = !isDatesEqual(this.#waypoint.dateFrom, update.dateFrom) ||
+    !isDatesEqual(this.#waypoint.dateTo, update.dateTo) ||
+    this.#waypoint.basePrice !== update.basePrice;
 
     this.#changeData(
       UserAction.UPDATE_TASK,

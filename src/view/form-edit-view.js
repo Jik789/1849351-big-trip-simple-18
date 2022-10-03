@@ -109,22 +109,6 @@ export default class FormEditView extends AbstractStatefulView {
     return createFormEditTemplate(this._state, this.#allOffers, this.#allDestinations);
   }
 
-  static parseWaypointToState = (waypoint) => ({
-    ...waypoint,
-    isDisabled: false,
-    isSaving: false,
-    isDeleting: false,
-  });
-
-  static parseStateToWaypoint = (state) => {
-    const waypoint = {...state};
-
-    delete waypoint.isDisabled;
-    delete waypoint.isSaving;
-    delete waypoint.isDeleting;
-    return waypoint;
-  };
-
   #setInnerHandlers = () => {
     Array.from(this.element.querySelectorAll('.event__type-input')).forEach((typeElement) => typeElement.addEventListener('click', this.#eventTypeHandler));
     this.element.querySelector('.event__input--price').addEventListener('change', this.#eventPriceHandler);
@@ -268,5 +252,21 @@ export default class FormEditView extends AbstractStatefulView {
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.deleteClick(FormEditView.parseStateToWaypoint(this._state));
+  };
+
+  static parseWaypointToState = (waypoint) => ({
+    ...waypoint,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
+  });
+
+  static parseStateToWaypoint = (state) => {
+    const waypoint = {...state};
+
+    delete waypoint.isDisabled;
+    delete waypoint.isSaving;
+    delete waypoint.isDeleting;
+    return waypoint;
   };
 }

@@ -18,12 +18,12 @@ const handleNewWaypointFormClose = () => {
   addWaypointButtonElement.disabled = false;
 };
 
-const handleNewWaypointButtonClick = () => {
+const handleNewEventButtonClick = () => {
   boardPresenter.createWaypoint(handleNewWaypointFormClose);
   addWaypointButtonElement.disabled = true;
 };
 
-addWaypointButtonElement.addEventListener('click', handleNewWaypointButtonClick);
+addWaypointButtonElement.addEventListener('click', handleNewEventButtonClick);
 addWaypointButtonElement.disabled = true;
 
 boardPresenter.init();
