@@ -1,8 +1,8 @@
 import { humanizeDateTime } from '../utils/utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import { WAYPOINT_TYPE } from '../const';
 import { DEFAULT_WAY_POINT} from '../const.js';
-import { toUpperCaseFirstLetter, getDestination, getOffersByType } from '../utils/utils';
+import { getDestination, getOffersByType } from '../utils/utils';
+import { createOffersByTypeTemplate, createEventTypeListTemplate, createDestinationOptionsTemplate } from './tamplate/common-templates';
 import flatpickr from 'flatpickr';
 import he from 'he';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -17,32 +17,6 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
 
   const dateTimeFromReadble = humanizeDateTime(dateFrom);
   const dateTimeToReadble = humanizeDateTime(dateTo);
-
-  const createEventTypeListTemplate = () => (WAYPOINT_TYPE.map((wayPointType) => {
-    const checked = waypoint.type === wayPointType ? 'checked' : '';
-    return `<div class="event__type-item">
-      <input id="event-type-${wayPointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${wayPointType}" ${checked}>
-      <label class="event__type-label  event__type-label--${wayPointType}" for="event-type-${wayPointType}-1">${toUpperCaseFirstLetter(wayPointType)}</label>
-    </div>`;
-  }
-  ).join(''));
-
-  const createOffersByTypeTemplate = () => (offersByType.map((offer, offerIndex) => {
-    const checked = waypoint.offers.includes(offer.id) ? 'checked' : '';
-    return `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerIndex}" data-index="${offer.id}" type="checkbox" name="event-offer-luggage" ${checked}>
-      <label class="event__offer-label" for="event-offer-${offerIndex}">
-        <span class="event__offer-title">${offer.title}</span>
-        +€&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
-      </label>
-    </div>`;
-  }
-  ).join(''));
-
-  const createDestinationOptionsTemplate = () => (allDestinations.map((destinationItem) => (
-    `<option value="${destinationItem.name}"></option>`
-  )).join(''));
 
   const createDestinationsContainerTemplate = () => `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -63,7 +37,7 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
     <div class="event__type-list">
       <fieldset class="event__type-group">
         <legend class="visually-hidden">Event type</legend>
-        ${createEventTypeListTemplate()}
+        ${createEventTypeListTemplate(waypoint)}
       </fieldset>
     </div>
   </div>
@@ -74,7 +48,7 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
     </label>
     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationById.name}" list="destination-list-1">
     <datalist id="destination-list-1">
-      ${createDestinationOptionsTemplate()}
+      ${createDestinationOptionsTemplate(allDestinations)}
     </datalist>
   </div>
 
@@ -104,7 +78,7 @@ const createFormEditTemplate = (waypoint, allOffers, allDestinations) => {
   <section class="event__section  event__section--offers">
     ${offersByType.length ? '<h3 class="event__section-title  event__section-title--offers">Offers</h3>' : ''}
     <div class="event__available-offers">
-      ${createOffersByTypeTemplate()}
+      ${createOffersByTypeTemplate(waypoint, offersByType)}
     </div>
   </section>
   ${destinationById ? createDestinationsContainerTemplate() : ''}
