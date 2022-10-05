@@ -30,8 +30,8 @@ export default class WaypointNewPresenter {
       this.#waypointsModel.allOffers
     );
 
-    this.#waypointNewComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#waypointNewComponent.setCancelClickHandler(this.#handleDeleteClick);
+    this.#waypointNewComponent.setFormSubmitHandler(this.#formSubmitHandler);
+    this.#waypointNewComponent.setCancelClickHandler(this.#pointDeleteHandler);
     render(this.#waypointNewComponent, this.#waypointListContainer, RenderPosition.AFTERBEGIN);
     document.addEventListener('keydown', this.#escKeyDownHandler);
   };
@@ -56,7 +56,7 @@ export default class WaypointNewPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
-  #handleFormSubmit = (waypoint) => {
+  #formSubmitHandler = (waypoint) => {
     this.#changeData(
       UserAction.ADD_TASK,
       UpdateType.MINOR,
@@ -64,7 +64,7 @@ export default class WaypointNewPresenter {
     );
   };
 
-  #handleDeleteClick = () => {
+  #pointDeleteHandler = () => {
     this.destroy();
   };
 

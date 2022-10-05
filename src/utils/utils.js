@@ -7,7 +7,7 @@ const humanizeDateTime = (dueDate) => dueDate === null ? '' : dayjs(dueDate).for
 const robotDate = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('YYYY-MM-DD');
 const robotDateTime = (dueDate) => dueDate === null ? '' : dayjs(dueDate).format('YYYY-MM-DDTHH:mm');
 
-const toUpperCaseFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
+const toUpperCaseFirstLetter = (word) => word[0].toUpperCase() + word.slice(1);
 
 const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
 

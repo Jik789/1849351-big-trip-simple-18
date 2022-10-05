@@ -49,7 +49,7 @@ export default class WaypointPresenter {
     this.#waypointComponent.setClickHandler(this.#setClickCardToForm);
     this.#waypointComponentEdit.setClickHandler(this.#setClickFormToCard);
     this.#waypointComponentEdit.setSubmitHandler(this.#setSubmitHandler);
-    this.#waypointComponentEdit.setDeleteClickHandler(this.#handleDeleteClick);
+    this.#waypointComponentEdit.setDeleteClickHandler(this.#pointDeleteHandler);
 
     if (prevWaypointComponent === null || prevWaypointComponentEdit === null) {
       render(this.#waypointComponent, this.#waypointListContainer);
@@ -143,7 +143,7 @@ export default class WaypointPresenter {
     );
   };
 
-  #handleDeleteClick = (waypoint) => {
+  #pointDeleteHandler = (waypoint) => {
     this.#changeData(
       UserAction.DELETE_TASK,
       UpdateType.MINOR,
